@@ -1,4 +1,7 @@
 {
   "version": 2,
+  "name": "focustimer",
+  "public": true,
   "builds": [{ "src": "server.js", "use": "@now/node" }]
+  
 }

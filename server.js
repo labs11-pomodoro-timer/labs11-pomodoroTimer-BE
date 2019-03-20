@@ -11,13 +11,8 @@ server.use(cors());
 server.use(express.json());
 
 // sanity check endpoint
-server.get('/', (req, res) => {
+server.get('*', (req, res) => {
     res.send("It's allliiiiiive!!");
 });
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-    port = 3333;
-}
-
-server.listen(port, () => console.log(`***API running on ${port}***`));
+server.listen();
