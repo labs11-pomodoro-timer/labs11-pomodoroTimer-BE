@@ -2,6 +2,7 @@
   "version": 2,
   "name": "focustimer",
   "public": true,
-  "builds": [{ "src": "server.js", "use": "@now/node" }]
-  
-}
+  "builds": [
+      { "src": "api/users/index.js", "use": "@now/node" }
+    ]
+  }

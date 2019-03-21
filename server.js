@@ -1,18 +1,20 @@
-require('dotenv').config();
+// Commented out to test alternative solution
 
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
+// require('dotenv').config();
 
-const server = express();
+// const express = require('express');
+// const helmet = require('helmet');
+// const cors = require('cors');
 
-server.use(helmet());
-server.use(cors());
-server.use(express.json());
+// const server = express();
 
-// sanity check endpoint
-server.get('*', (req, res) => {
-    res.send("It's allliiiiiive!!");
-});
+// server.use(helmet());
+// server.use(cors());
+// server.use(express.json());
 
-server.listen();
+// // sanity check endpoint
+// server.get('*', (req, res) => {
+//     res.send("It's allliiiiiive!!");
+// });
+
+// server.listen();
