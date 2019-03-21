@@ -1,3 +1,3 @@
 module.exports = (req, res) => {
-    res.end("Deployment successful");
+    res.end("Successfully deployed!");
   };
