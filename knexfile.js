@@ -6,9 +6,9 @@ module.exports = {
   'development': {
     'client': 'pg',
     'connection': {
-      host: 'focus-timer-db.coiuxw91e5mz.us-east-2.rds.amazonaws.com',
-      user: 'focustimer',
-      password: 'LambdaLabs11',
+      host: process.env.DATABASE_URL,
+      user: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PW,
       database: 'postgres'
     },
     'migrations': {
@@ -19,4 +19,3 @@ module.exports = {
     }
   }
 }
-
