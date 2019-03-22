@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../../data/dbModel.js');
+
 const app = express();
 
 // Commented temporarily for testing
@@ -23,3 +24,4 @@ if (!process.env.NOW_REGION) {
 } 
 
 module.exports = app
+
