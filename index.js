@@ -1,4 +1,5 @@
 const express = require('express')
+const db = require('./data/dbModel.js');
 const app = express()
 
 app.get('*', (req, res) => {
