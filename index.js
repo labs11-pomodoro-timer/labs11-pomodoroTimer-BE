@@ -1,5 +1,5 @@
 const express = require('express')
-const db = require('./data/dbModel.js');
+
 const app = express()
 
 app.get('*', (req, res) => {
@@ -7,5 +7,7 @@ app.get('*', (req, res) => {
     res.write('<h2>Go to <a href="/about">/about</a></h2>')
     res.end()
 })
+
+
 
 module.exports = app

@@ -1,6 +1,6 @@
 const knex = require('knex');
 
-const testing = require('./dbConfig.js')
+const db = require('dbConfig.js')
 
 module.exports = {
     find,
