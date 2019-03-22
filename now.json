@@ -4,5 +4,12 @@
   "public": true,
   "builds": [
       { "src": "api/users/index.js", "use": "@now/node" }
-    ]
-  }
+    ],
+  "env": {
+    "PGUSER": "focustimer",
+    "PGHOST": "focus-timer-db.coiuxw91e5mz.us-east-2.rds.amazonaws.com",
+    "PGPASSWORD": "LambdaLabs11",
+    "PGDATABASE": "focus-timer-db",
+    "PGPORT": 5432
+  } 
+}
