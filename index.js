@@ -8,6 +8,4 @@ app.get('*', (req, res) => {
     res.end()
 })
 
-
-
 module.exports = app

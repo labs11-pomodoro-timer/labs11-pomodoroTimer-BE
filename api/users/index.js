@@ -2,7 +2,7 @@ const express = require('express')
 const db = require('../../data/dbModel.js');
 const app = express()
 
-app.get('/', (req, res) => {
+app.get('/api/users', (req, res) => {
   db
   .find()
   .then(users => {
