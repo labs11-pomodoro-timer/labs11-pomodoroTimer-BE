@@ -8,7 +8,7 @@
       { "src": "*.js", "use": "@now/node" }
     ],
     "routes": [
-      { "src": "/api/users/index.js", "methods": ["POST", "GET"] }
+      { "src": "/api/(.*)", "dest": "/api/$1", "methods": ["POST", "GET"] }
     ],
   "env": {
     "PGUSER": "focustimer",
