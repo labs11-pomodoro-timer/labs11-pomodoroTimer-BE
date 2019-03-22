@@ -4,10 +4,11 @@
   "public": true,
   "builds": [
       { "src": "api/users/index.js", "use": "@now/node" },
+      { "src": "api/users/test/index.js", "use": "@now/node"},
       { "src": "*.js", "use": "@now/node" }
     ],
     "routes": [
-      
+      { "src": "/api/users/index.js", "methods": ["POST", "GET"] }
     ],
   "env": {
     "PGUSER": "focustimer",
