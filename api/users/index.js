@@ -18,8 +18,8 @@ app.get('*', async (req, res) => {
 //     res.write('<h2>Go to <a href="/about">/about</a></h2>')
 //     res.end()
 // })
-// app.listen();
-
-
+if (!process.env.NOW_REGION) {
+  app.listen();
+} 
 
 module.exports = app
