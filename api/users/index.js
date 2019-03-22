@@ -1,12 +1,14 @@
-const express = require('express')
+const express = require('express');
 const db = require('../../data/dbModel.js');
-const app = express()
+const app = express();
 
-app.get('/api/users', (req, res) => {
-  db
-  .find()
-  .then(users => {
-      res.status(200).json(users);
-  })
-  .catch(err => res.status(500).json(err));
+app.get('/api/users', async (req, res) => {
+  const users = await db.find();
+  if (!users) {
+    return res.sendStatus(404);
+  }
+
+  return res.json(users);
+
 });
+module.exports = app;
