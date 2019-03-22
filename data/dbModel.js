@@ -11,29 +11,29 @@ module.exports = {
 };
 
 function find() {
-    return db('users');
+    return db('testing');
 }
 
 function findById(id) {
-    return db('users')
+    return db('testing')
         .where({ id })
         .first();
 }
 
 function add(user) {
-    return db('users')
+    return db('testing')
         .insert(user)
-        .into('users');
+        .into('testing');
 }
 
 function update(id, changes) {
-    return db('users')
+    return db('testing')
         .where({ id })
         .update(changes);
 }
 
 function remove(id) {
-    return db('users')
+    return db('testing')
     .where({ id })
     .del();
 }
