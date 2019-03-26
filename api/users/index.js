@@ -1,9 +1,10 @@
-const express = require('express')
-const db = require('../../data/dbModel.js');
-const app = express()
+const express = require('express');
 
-// endpoint that returns users from the database
-app.get('/api/users', (req, res) => {
+const db = require('../../data/dbModel.js');
+
+const router = express.Router();
+
+router.get('/', (req, res) => {
   db
   .find()
   .then(users => {
@@ -11,3 +12,5 @@ app.get('/api/users', (req, res) => {
   })
   .catch(err => res.status(500).json(err));
 });
+
+module.exports = router;
