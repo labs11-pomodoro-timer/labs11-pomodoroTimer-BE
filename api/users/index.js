@@ -55,8 +55,24 @@ router.delete('/:id', (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).json({ message: 'error deleting user' });
+      res.status(500).json({ message: 'error deleting user', err });
     });
+});
+
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  db.update(id, changes)
+    .then(count => {
+      if (count) {
+        res.status(200).json({ message: `${count} user(s) updated` });
+      } else {
+        res.status(404).json({ message: 'user not found' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'thats our bad', err })
+    })
 });
 
 module.exports = router;
