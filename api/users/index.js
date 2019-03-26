@@ -13,11 +13,11 @@ router.get('/', (req, res) => {
   .catch(err => res.status(500).json(err));
 });
 
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
+router.get('/:email', (req, res) => {
+  const { email } = req.params;
 
   db
-  .findById(id)
+  .findByEmail(email)
   .then(user => {
     if (user) {
       res.status(200).json(user);
@@ -32,6 +32,17 @@ router.get('/:id', (req, res) => {
   })
 });
 
+router.post('/', async (req, res) => {
+  try {
+    const userData = req.body;
+    const userId = await db.add(userData);
+    const user = await db.findById(userId[0]);
+    res.status(201).json(user);
+  } catch (error) {
+    let message = 'error creating the user';
 
+    res.status(500).json({ message, error });
+  }
+});
 
 module.exports = router;
