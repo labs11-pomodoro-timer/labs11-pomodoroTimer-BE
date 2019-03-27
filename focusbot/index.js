@@ -6,7 +6,7 @@ module.exports = {
 
 function createBot() {
     const bot = new SlackBot({
-        token: 'xoxb-586899066608-580615337281-uMcxycdeJGC2gccWT6My2KQ0',
+        token: process.env.BOT_TOKEN,
         name: 'focus-timer'
     });
     
