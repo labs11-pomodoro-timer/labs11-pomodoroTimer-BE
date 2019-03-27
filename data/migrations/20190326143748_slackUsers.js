@@ -1,17 +1,28 @@
-
 exports.up = function(knex) {
   return knex.schema.createTable('slackUsers', slackUsers => {
       slackUsers.increments();
       //! not sure about the type yet
       slackUsers
-        .string('slackAuth', 128)
-        .notNullable()
-        .unique();
+        .string('accessToken')
+        .notNullable();
 
       slackUsers
-        .integer('userId', 6)
-        .unsigned()
+        .string('userId')
         .notNullable();
+
+      slackUsers
+        .string('botUserId');
+
+      slackUsers
+        .string('botAccessToken');
+
+      slackUsers
+        .integer('memberId')
+	      .unique()
+        .notNullable();
+
+      slackUsers
+        .string('channelId');
 
   })
 };
