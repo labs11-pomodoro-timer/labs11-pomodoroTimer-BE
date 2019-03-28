@@ -7,12 +7,12 @@ exports.seed = function (knex, Promise) {
       return knex('slackUsers').insert([
         {
           id: 1,
-          accessToken: 'xoxp-586489126608-581489261633-481647596384-235876421f422489k5c0669d3710b18a',
+          accessToken: 'xoxp-581894126608-581481478633-481579596384-231576421f422489k5c0669d3710b18a',
           userId: 'UNY8FLMJM',
           teamName: 'Labs11 Pomodoro WS',
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
-          botAccessToken: 'xoxb-586899066608-580615337281-zFqtz55PRT5FDUjwpaeZiB4G',
+          botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
           userEmail: 'homullen0@last.fm',
           channelId: 'CH8SF269E'
         },
@@ -23,7 +23,7 @@ exports.seed = function (knex, Promise) {
           teamName: 'Labs11 Pomodoro WS',
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
-          botAccessToken: 'xoxb-586899066608-580615337281-zFqtz55PRT5FDUjwpaeZiB4G',
+          botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
           userEmail: 'gsambals1@merriam-webster.com',
           channelId: 'CH8SF269E'
         },
@@ -34,7 +34,7 @@ exports.seed = function (knex, Promise) {
           teamName: 'Labs11 Pomodoro WS',
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
-          botAccessToken: 'xoxb-586899066608-580615337281-zFqtz55PRT5FDUjwpaeZiB4G',
+          botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
           userEmail: 'kerie2@desdev.cn',
           channelId: 'CH8SF269E'
         },
@@ -45,7 +45,7 @@ exports.seed = function (knex, Promise) {
           teamName: 'Labs11 Pomodoro WS',
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
-          botAccessToken: 'xoxb-586899066608-580615337281-zFqtz55PRT5FDUjwpaeZiB4G',
+          botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
           userEmail: 'dbleaden3@cnn.com',
           channelId: 'CH8SF269E'
         },
@@ -56,7 +56,7 @@ exports.seed = function (knex, Promise) {
           teamName: 'Labs11 Pomodoro WS',
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
-          botAccessToken: 'xoxb-586899066608-580615337281-zFqtz55PRT5FDUjwpaeZiB4G',
+          botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
           userEmail: 'boris4@hibu.com',
           channelId: 'CH8SF269E'
         }
