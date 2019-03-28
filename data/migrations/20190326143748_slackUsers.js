@@ -9,6 +9,14 @@ exports.up = function(knex) {
       slackUsers
         .string('userId')
         .notNullable();
+      
+      slackUsers
+        .string('teamName')
+        .notNullable();
+      
+      slackUsers
+        .string('teamId')
+        .notNullable();
 
       slackUsers
         .string('botUserId');
@@ -17,7 +25,7 @@ exports.up = function(knex) {
         .string('botAccessToken');
 
       slackUsers
-        .integer('memberId')
+        .integer('userEmail')
 	      .unique()
         .notNullable();
 
