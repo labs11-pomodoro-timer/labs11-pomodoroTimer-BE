@@ -18,7 +18,7 @@ function findById(id) {
 }
 
 function remove(id) {
-    return db('testing')
+    return db('slackUsers')
         .where({ id })
         .del();
 }

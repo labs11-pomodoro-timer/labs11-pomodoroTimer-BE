@@ -1,15 +1,17 @@
 const express = require('express');
 const request = require('request');
+const bcrypt = require('bcryptjs');
 
 const db = require('../../data/dbslackUserModel.js');
 
 const router = express.Router();
 
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-// let uri = "https://be5b42b8.ngrok.io/api/slackusers";
+// let uri = "https://b9d97fde.ngrok.io/api/slackusers";
 let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers";
 
-router.get('/', (req, res) => {
+// add slackuser info
+router.get('/add', (req, res) => {
     const uriUpdate = {
         uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
         method: "GET"
@@ -25,13 +27,16 @@ router.get('/', (req, res) => {
             res.send(`Error: ${JSON.stringify(reqResponse)}`).status(200).end();
         } else {
             // need to bring something along in state to create the connection between tables
+            //! NEED TO HASH TOKENS
+            const aToken = bcrypt.hashSync(reqResponse.access_token, 12);
+            const bToken = bcrypt.hashSync(reqResponse.bot.bot_access_token, 12);
             let slackUserInfo = {
-                accessToken: reqResponse.access_token,
+                accessToken: aToken,
                 userId: reqResponse.user_id,
                 teamName: reqResponse.team_name,
                 teamId: reqResponse.team_id,
                 botUserId: reqResponse.bot.bot_user_id,
-                botAccessToken: reqResponse.bot.bot_access_token,
+                botAccessToken: bToken,
                 userEmail: 'member email', // item coming from state
                 channelId: reqResponse.incoming_webhook.channel_id
             }
@@ -40,15 +45,23 @@ router.get('/', (req, res) => {
                 res.redirect("https://focustimer.now.sh/");
             }).catch(`Error: ${res}`)
         }
-
-
     })
-    // db
-    //     .find()
-    //     .then(slackUsers => {
-    //         res.status(200).json(slackUsers);
-    //     })
-    //     .catch(err => res.status(500).json(err));
+});
+
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.remove(id)
+        .then(count => {
+            if (count < 1) {
+                res.status(404).json({ message: 'please try a valid user' });
+            } else {
+                res.status(200).json({ message: 'user has been deleted' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'error deleting user', err });
+        });
 });
 
 module.exports = router;
