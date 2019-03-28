@@ -7,8 +7,17 @@ const db = require('../../data/dbslackUserModel.js');
 const router = express.Router();
 
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-// let uri = "https://b9d97fde.ngrok.io/api/slackusers";
-let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers";
+// let uri = "https://b9d97fde.ngrok.io/api/slackusers/add";
+let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/add";
+
+router.get('/', (req, res) => {
+    db
+        .find()
+        .then(users => {
+            res.status(200).json(users);
+        })
+        .catch(err => res.status(500).json(err));
+});
 
 // add slackuser info
 router.get('/add', (req, res) => {
@@ -27,7 +36,6 @@ router.get('/add', (req, res) => {
             res.send(`Error: ${JSON.stringify(reqResponse)}`).status(200).end();
         } else {
             // need to bring something along in state to create the connection between tables
-            //! NEED TO HASH TOKENS
             const aToken = bcrypt.hashSync(reqResponse.access_token, 12);
             const bToken = bcrypt.hashSync(reqResponse.bot.bot_access_token, 12);
             let slackUserInfo = {
