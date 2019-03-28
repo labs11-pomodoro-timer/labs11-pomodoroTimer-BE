@@ -23,7 +23,7 @@ function createBot() {
         if (data.type !== 'message') {
             return;
         }
-        console.log(data) // to see full response 
+        // console.log(data) // to see full response 
         handleMessage(data);
     });
 
