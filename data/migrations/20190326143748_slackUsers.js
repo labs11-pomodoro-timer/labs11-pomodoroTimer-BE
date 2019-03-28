@@ -1,40 +1,40 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('slackUsers', slackUsers => {
-      slackUsers.increments();
-      //! not sure about the type yet
-      slackUsers
-        .string('accessToken')
-        .notNullable();
+    slackUsers.increments();
+    //! not sure about the type yet
+    slackUsers
+      .string('accessToken')
+      .notNullable();
 
-      slackUsers
-        .string('userId')
-        .notNullable();
+    slackUsers
+      .string('userId')
+      .notNullable();
 
-      slackUsers
-        .string('teamName')
-        .notNullable();
+    slackUsers
+      .string('teamName')
+      .notNullable();
 
-      slackUsers
-        .string('teamId')
-        .notNullable();
+    slackUsers
+      .string('teamId')
+      .notNullable();
 
-      slackUsers
-        .string('botUserId');
+    slackUsers
+      .string('botUserId');
 
-      slackUsers
-        .string('botAccessToken');
+    slackUsers
+      .string('botAccessToken');
 
-      slackUsers
-        .integer('memberId')
-	      .unique()
-        .notNullable();
+    slackUsers
+      .integer('userEmail')
+      .notNullable();
+    // .unique()
 
-      slackUsers
-        .string('channelId');
+    slackUsers
+      .string('channelId');
 
   })
 };
 
-exports.down = function(knex, Promise) {
-    return knex.schema.dropTableIfExists('slackUsers');
+exports.down = function (knex, Promise) {
+  return knex.schema.dropTableIfExists('slackUsers');
 };
