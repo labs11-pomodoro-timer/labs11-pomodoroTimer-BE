@@ -6,11 +6,12 @@ const db = require('../../data/dbslackUserModel.js');
 const router = express.Router();
 
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-let uri = "https://fc33d826.ngrok.io/api/slackusers";
+// let uri = "https://fc33d826.ngrok.io/api/slackusers";
+let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers";
 
 router.get('/', (req, res) => {
     const uriUpdate = {
-        uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}&state=me@me.com`,
+        uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
         method: "GET"
     };
     //! works with out bot running
@@ -31,7 +32,7 @@ router.get('/', (req, res) => {
                 teamId: reqResponse.team_id,
                 botUserId: reqResponse.bot.bot_user_id,
                 botAccessToken: reqResponse.bot.bot_access_token,
-                userEmail: 'member email',
+                userEmail: 'member email', // item coming from state
                 channelId: reqResponse.incoming_webhook.channel_id
             }
             // need to add information into the database

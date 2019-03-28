@@ -26,8 +26,8 @@ exports.up = function(knex) {
 
       slackUsers
         .integer('userEmail')
-	      .unique()
         .notNullable();
+	      // .unique()
 
       slackUsers
         .string('channelId');
