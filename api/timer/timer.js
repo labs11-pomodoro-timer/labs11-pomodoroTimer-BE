@@ -18,7 +18,9 @@ function countDown() {
 }
 
 function timerReport() {
-    
+    let seconds = time % 60;
+    let minutes = ((time / 60) | 0);
+    return "The user is in Focus mode for " + minutes + ":" + seconds;
 }
 
 function setStartTime() {
