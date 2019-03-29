@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 router.get('/slackButton', (req, res) => {
     const options = {
         // place state here
-        uri: `https://slack.com/oauth/authorize?client_id=586899066608.590399489303&scope=bot,commands&redirect_uri=${uri}`,
+        uri: `https://slack.com/oauth/authorize?client_id=586899066608.590399489303&scope=bot,commands,channels:write,groups:write,mpim:write,im:write&redirect_uri=${uri}`,
         method: 'GET'
     };
     request(options, (error, response, body) => {
