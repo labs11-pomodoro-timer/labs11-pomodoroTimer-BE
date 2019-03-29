@@ -4,7 +4,8 @@ module.exports = {
     find,
     findById,
     remove,
-    add
+    add,
+    update
 };
 
 function find() {
@@ -27,4 +28,10 @@ function add(user) {
     return db('slackUsers')
         .insert(user)
         .into('slackUsers');
+}
+
+function update(id, changes) {
+    return db('slackUsers')
+        .where({ id })
+        .update(changes);
 }
