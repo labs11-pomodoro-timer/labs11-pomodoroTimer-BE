@@ -8,8 +8,8 @@ const db = require('../../data/dbslackUserModel.js');
 const router = express.Router();
 
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-let uri = "https://bc2134a3.ngrok.io/api/slackusers/add";
-// let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/add";
+// let uri = "https://bc2134a3.ngrok.io/api/slackusers/add";
+let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/add";
 
 router.get('/', (req, res) => {
     db
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 router.get('/slackButton', (req, res) => {
     const options = {
         // place state here
-        uri: `https://slack.com/oauth/authorize?client_id=586899066608.590399489303&scope=bot,commands&redirect_uri=${uri}`,
+        uri: `https://slack.com/oauth/authorize?client_id=586899066608.590399489303&scope=bot,commands,channels:write,groups:write,mpim:write,im:write&redirect_uri=${uri}`,
         method: 'GET'
     };
     request(options, (error, response, body) => {

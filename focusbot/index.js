@@ -1,4 +1,5 @@
 const SlackBot = require('slackbots');
+const request = require('request');
 
 module.exports = {
     createBot,
@@ -15,10 +16,20 @@ function createBot() {
         const params = {
             icon_emoji: ':tomato:'
         }
-    
-        bot.postMessageToChannel('general', 'Time to Focus', params);
+        const help = bot.getChannels();
+        help._value.channels.map(data=>{
+            let exists = data.is_member;
+            let id = data.id;
+            let name = data.name;
+            let botName = 'UH2J39X89';
+            console.log({exists, id, name });
+            if(!exists) {
+                inviteToChannel(data.id, botName);
+            }
+        });
+        // console.log(help._value.channels);
     });
-    
+
     bot.on('message', data => {
         if (data.type !== 'message') {
             return;
@@ -33,9 +44,19 @@ function createBot() {
             const params = {
                 icon_emoji: ':wave:'
             }
-    
-            bot.postMessageToChannel('general', `Hello <@${message.user}>`, params);
+            bot.postMessageToChannel('general', `Hello <@${message.team}>`, params);
         }
+    }
+
+    function inviteToChannel(channel, botUser) {
+        const params = {
+            uri: `https://slack.com/api/conversations.invite?token=${process.env.USER_TOKEN}&channel=${channel}&users=${botUser}&pretty=1`,
+            method: "POST"
+        }
+        request.post(params, (error, response, body) => {
+            let reqResponse = JSON.parse(body);
+            console.log(reqResponse);
+        })
     }
 }
 
