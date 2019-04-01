@@ -81,7 +81,7 @@ The back end application for the Pomodoro Timer Project built by Lambda School S
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id : 12, name : "Michael Bloom" }`
+    **Content:** `[{ id : 12, name : "Michael Bloom" }, { id: 13, name : "John Smith" }]`
  
 * **Error Response:**
 
@@ -128,7 +128,7 @@ The back end application for the Pomodoro Timer Project built by Lambda School S
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `[{ userId : 12, timerRunning: true, timerStart: 04012019089546 timerEnd: 04012019090000 }]`
+    **Content:** `[{ userId : 12, timerRunning: true, timerStart: 04012019089546 timerEnd: 04012019090000 }, { userId : 13, timerRunning: true, timerStart: 04012019128495, timerEnd: 040120191302485}]`
  
 * **Error Response:**
 
@@ -140,6 +140,46 @@ The back end application for the Pomodoro Timer Project built by Lambda School S
   ```javascript
     $.ajax({
       url: "api/timer/",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+
+**Show user's timer information**
+----
+  Return in json format the user's timer information
+
+  * **URL**
+    /api/timer/:UserId
+
+  * **Method:**
+    `GET`
+
+  * **URL Params**
+   
+     **Required:**
+
+    `id=[integer]`
+
+  * **Data Params**
+    * **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ userId : 12, timerRunning: true, timerStart: 04012019089546 timerEnd: 04012019090000 }`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "You are unauthorized to make this request." }`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "api/timer/:userId",
       dataType: "json",
       type : "GET",
       success : function(r) {
