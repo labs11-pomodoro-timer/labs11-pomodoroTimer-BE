@@ -2,9 +2,9 @@
 
 The back end application for the Pomodoro Timer Project built by Lambda School Students in Labs11!
 
-## API usage
+# API usage
 
-### Users endpoint
+# Users endpoints
 
 **Show User**
 ----
@@ -56,7 +56,7 @@ The back end application for the Pomodoro Timer Project built by Lambda School S
     });
   ```
 
-  **Show All Users**
+**Show All Users**
 ----
   Returns json data about all users stored in the users table.
 
@@ -93,6 +93,53 @@ The back end application for the Pomodoro Timer Project built by Lambda School S
   ```javascript
     $.ajax({
       url: "api/users/",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+
+# Timer endpoints
+
+**Show All Timers**
+----
+  Returns json data about all active timers, including the users running them
+
+* **URL**
+
+  /api/timer/
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+  None
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `[{ userId : 12, timerRunning: true, timerStart: 04012019089546 timerEnd: 04012019090000 }]`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "You are unauthorized to make this request." }`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "api/timer/",
       dataType: "json",
       type : "GET",
       success : function(r) {
