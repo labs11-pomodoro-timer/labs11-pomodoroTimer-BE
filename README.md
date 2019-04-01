@@ -1,6 +1,18 @@
-# labs11-pomodoroTimer-BE
+# Labs 11 - Focus Timer - Backend
 
 The back end application for the Pomodoro Timer Project built by Lambda School Students in Labs11!
+
+# Getting Started
+
+Information regarding installation and deployment
+
+## Installation
+
+Information about installation
+
+## Deployment
+
+Information about deployment
 
 # API usage
 
