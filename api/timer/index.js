@@ -20,7 +20,7 @@ router.put('/startFocus/:id', (req, res) => {
         "focusStart": focusStart,
         "focusEnd": focusEnd
     }
-    db.start(id, changes)
+    db.updateTS(id, changes)
         .then(count => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });
@@ -60,7 +60,7 @@ router.put('/stopFocus/:id', (req, res) => {
         "focusStart": null,
         "focusEnd": null
     }
-    db.start(id, changes)
+    db.updateTS(id, changes)
         .then(count => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });

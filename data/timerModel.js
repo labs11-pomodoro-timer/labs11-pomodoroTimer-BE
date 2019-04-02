@@ -1,11 +1,11 @@
 const db = require('./dbConfig');
 
 module.exports = {
-    start,
+    updateTS,
     findById
 };
 
-function start(id, changes) {
+function updateTS(id, changes) {
     return db('testing')
         .where({ id })
         .update(changes); 
