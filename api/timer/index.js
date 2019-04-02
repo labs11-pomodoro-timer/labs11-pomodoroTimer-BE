@@ -32,6 +32,26 @@ function waitAndSee(times) {
     }, 1000)
 }
 
+// This is the endpoint that will be hit to initiate the check of users
+// who are about a minute away from ending their focus timer, if their timer
+// is set to expire soon, a timeout will be started that will clear the timer
+// information once it reaches the deadline
+router.get('/', (req, res) => {
+    db.find()
+    .then(users => {
+        if (users) {
+            for (let i = 0; i < users.length-1;i++) {
+                if (user[i].focusEnd - user[i].focusStart <= 60000) {
+
+                }
+            }
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ message: 'server error', err })
+    })
+})
+
 router.get('/start/:time', (req, res) => {
     const { time } = req.params;
     let initialTime;
