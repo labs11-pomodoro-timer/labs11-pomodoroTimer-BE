@@ -1,14 +1,54 @@
+// The plan for the timer will be as follows:
+// The server will regularly check the user database for timers that are set 
+// to expire soon. When a timer is set to expire, the server will load up a 
+// timeout that will execute the stop code.
+
 require('dotenv').config();
 const express = require('express');
 const request = require('request');
 const router = express.Router();
-const {countDown} = require('./timer.js');
+
 
 const db = require('../../data/timerModel');
 
-router.get('/:time', (req, res) => {
+function countDown(time) {
+    console.log("countDown initiated");
+    waitAndSee(time);
+}
+
+// This function will utilize the clearTimeout
+// function clearTimer() {
+//     clearTimeout(timeOut);
+// }
+      
+
+function waitAndSee(times) {
+    if(times < 1) {
+        return;
+    }
+    setTimeout(function() {
+        console.log(times);
+        waitAndSee(times-1);
+    }, 1000)
+}
+
+router.get('/start/:time', (req, res) => {
     const { time } = req.params;
-    countDown(time);
+    let initialTime;
+
+    if(time === "short"){
+        initialTime = 5*60;
+    }else if(time === "long"){
+        initialTime = 15*60;
+    }else if(time === "focus"){
+        initialTime = 25*60;
+    }else if(isNaN(time) === false){
+        initialTime = parseInt(time);
+    }else {
+        res.status(404).json({ message: 'Cannot process request, time argument invalid.'})
+    }
+
+    countDown(initialTime);
     res.status(200).json({ message: 'Timer Started' });
 });
 
