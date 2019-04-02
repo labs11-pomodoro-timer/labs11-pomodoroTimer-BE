@@ -17,6 +17,12 @@ exports.up = function(knex) {
 
       testing
           .integer('phone', 10);
+    
+      testing
+          .integer('focusStart', 20);
+
+      testing
+          .integer('focusEnd', 20);
 
   })
 
