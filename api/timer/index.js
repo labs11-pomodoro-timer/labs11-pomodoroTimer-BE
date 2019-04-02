@@ -37,9 +37,17 @@ router.get('/checkFocus/:id', (req, res) => {
     const { id } = req.params;
     db.findById(id)
         .then(user => {
-            const currentTime = Date.now();
-            const timeleft = Math.floor((user.focusEnd - currentTime) / (1000 * 60));
-            res.status(200).json({ message: `user is in focus for ${timeleft} minutes`});
+            if (user) {
+                if (user.focusEnd != null) {
+                    const currentTime = Date.now();
+                    const timeleft = Math.floor((user.focusEnd - currentTime) / (1000 * 60));
+                    res.status(200).json({ message: `user is in focus for ${timeleft} minutes` });
+                } else {
+                    res.status(200).json({ message: `${user.firstname} is not currently in focus time` })
+                }
+            } else {
+                res.status(404).json({ message: 'unable to find user' });
+            }
         })
         .catch(err => {
             res.status(500).json({ message: 'server error', err });
