@@ -44,6 +44,11 @@ function waitAndSee(times) {
     }, 1000)
 }
 
+// This is the heartbeat of the timer
+// At a regular interval (every 30 seconds) this interval executes a function
+// that checks all users in the database for active timers
+// A user with a timer that is ending soon will be scheduled a timeout for a
+// function that sends a GET request to the endpoint that stops the timer
 setInterval(function() {
         db.find()
         .then(users => {
@@ -88,6 +93,8 @@ setInterval(function() {
 // who are about a minute away from ending their focus timer, if their timer
 // is set to expire soon, a timeout will be started that will clear the timer
 // information once it reaches the deadline
+
+// WARNING THIS ENDPOINT IS STILL UNDER DEVELOPMENT, MAY CONTAIN ERRORS
 
 router.get('/', (req, res) => {
     db.find()
