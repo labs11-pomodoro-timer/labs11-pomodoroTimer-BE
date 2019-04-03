@@ -24,6 +24,14 @@ function countDown(time) {
 
 function waitAndSee(times) {
     if(times < 1) {
+        console.log("countdown finished");
+        // request({
+        //     url: "/",
+        //     method: "GET",
+        //     json: true,
+        // }, function (error, response, body) {
+        //     console.log(response);
+        // })
         return;
     }
     setTimeout(function() {
@@ -42,7 +50,9 @@ router.get('/', (req, res) => {
         if (users) {
             for (let i = 0; i < users.length-1;i++) {
                 if (user[i].focusEnd - user[i].focusStart <= 60000) {
-
+                    // Here is where we will queue up our function that
+                    // begins the Timeout until the timer information
+                    // is cleared from the user's database
                 }
             }
         }
