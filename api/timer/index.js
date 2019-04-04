@@ -64,9 +64,22 @@ setInterval(function() {
                         // If the end time was missed, this is the cleanup code
                         // Here, code should be executed to clear the user's
                         // timer and set the fields back to null
-                        console.log(`User #${users[i].id} needs their timer cleared`);
+                        console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
+                        request({
+                            uri: `http://localhost:8000/api/timer/stopFocus/${users[i].id}`,
+                            method: 'PUT',
+                            timeout: 3000,
+                            }, function (error, response, body) {
+                                // The endpoint here is doing all the work, so we don't currently
+                                // need this function to do anything. However, we have it as an
+                                // option.
+                                // Console logs for testing
+                                //console.log("Error: ", error);
+                                //console.log("Response: ", response);
+                                //console.log("Body: ", body);
+                        });
                     }
-                    if (users[i].focusEnd - Date.now() <= 30000) {
+                    if (users[i].focusEnd - Date.now() <= 30000 && users[i].focusEnd - Date.now() > 0) {
                         // Here is where we will queue up our function that
                         // begins the Timeout until the timer information
                         // is cleared from the user's database
@@ -77,7 +90,7 @@ setInterval(function() {
                             setTimeout(function() {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopFocus/${users[i].id}`,
+                                    uri: `http://localhost:8000/api/timer/stopFocus/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                     }, function (error, response, body) {
@@ -112,13 +125,16 @@ router.get('/', (req, res) => {
         if (users) {
             let newUsers = [];
             for (let i = 0; i < users.length-1;i++) {
-                if (user[i].focusEnd && user[i].focusStart) {
+                if (users[i].focusEnd && users[i].focusStart) {
                     
                     newUsers.push(user[i])
                 }
             }
             console.log(newUsers);
             res.status(200).json({ users: newUsers})
+        }
+        else {
+            res.status(200).json({ message: "No users are running timers" })
         }
     })
     .catch(err => {
