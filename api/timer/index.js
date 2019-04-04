@@ -54,25 +54,25 @@ setInterval(function() {
         .then(users => {
             if (users) {
                 for (let i = 0; i < users.length-1;i++) {
-                    if (users[i].focusEnd === null | users[i].focusStart === null) {
+                    if (users[i].timerEnd === null | users[i].timerStart === null) {
                         // If a user does not have an active timer, we don't want anything
                         // to happen to them and we will skip them.
                         console.log(`User #${users[i].id} does not have an active timer.`);
                         continue;
                     }
-                    if (users[i].focusEnd < Date.now()) {
+                    if (users[i].timerEnd < Date.now()) {
                         // If the end time was missed, this is the cleanup code
                         // Here, code should be executed to clear the user's
                         // timer and set the fields back to null
                         console.log(`User #${users[i].id} needs their timer cleared`);
                     }
-                    if (users[i].focusEnd - Date.now() <= 60000) {
+                    if (users[i].timerEnd - Date.now() <= 60000) {
                         // Here is where we will queue up our function that
                         // begins the Timeout until the timer information
                         // is cleared from the user's database
                         function setTimertoEnd() {
                             
-                            let timeRemaining = users[i].focusEnd - Date.now();
+                            let timeRemaining = users[i].timerEnd - Date.now();
                             console.log(`Setting User#${users[i].id} to end timer in ${timeRemaining}ms`)
                             setTimeout(function() {
                                 console.log(`${users[i].id} should have their timer ended here`);
@@ -111,7 +111,7 @@ router.get('/', (req, res) => {
         if (users) {
             let newUsers = [];
             for (let i = 0; i < users.length-1;i++) {
-                if (user[i].focusEnd - user[i].focusStart <= 60000) {
+                if (user[i].timerEnd - user[i].timerStart <= 60000) {
                     // Here is where we will queue up our function that
                     // begins the Timeout until the timer information
                     // is cleared from the user's database
@@ -147,14 +147,14 @@ router.get('/start/:time', (req, res) => {
     res.status(200).json({ message: 'Timer Started' });
 });
 
-// WARNING - UNDER DEVELOPMENT - focusEnd current set to 2 minutes to test!
+// WARNING - UNDER DEVELOPMENT - timerEnd current set to 2 minutes to test!
 router.put('/startFocus/:id', (req, res) => {
     const { id } = req.params;
-    const focusStart = Date.now();
-    const focusEnd = Date.now() + 1000 * 60 * 2;
+    const timerStart = Date.now();
+    const timerEnd = Date.now() + 1000 * 60 * 2;
     const changes = {
-        "focusStart": focusStart,
-        "focusEnd": focusEnd
+        "timerStart": timerStart,
+        "timerEnd": timerEnd
     }
     db.updateTS(id, changes)
         .then(count => {
@@ -174,9 +174,9 @@ router.get('/checkFocus/:id', (req, res) => {
     db.findById(id)
         .then(user => {
             if (user) {
-                if (user.focusEnd != null) {
+                if (user.timerEnd != null) {
                     const currentTime = Date.now();
-                    const timeleft = Math.floor((user.focusEnd - currentTime) / (1000 * 60));
+                    const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
                     res.status(200).json({ message: `user is in focus for ${timeleft} minutes` });
                 } else {
                     res.status(200).json({ message: `${user.firstname} is not currently in focus time` })
@@ -193,8 +193,8 @@ router.get('/checkFocus/:id', (req, res) => {
 router.put('/stopFocus/:id', (req, res) => {
     const { id } = req.params;
     const changes = {
-        "focusStart": null,
-        "focusEnd": null
+        "timerStart": null,
+        "timerEnd": null
     }
     db.updateTS(id, changes)
         .then(count => {
