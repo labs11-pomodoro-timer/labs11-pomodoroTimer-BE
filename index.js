@@ -1,5 +1,5 @@
-const app = require('./server.js');
-const focusbot = require('./focusbot/index');
+const app = require("./server.js");
+const focusbot = require("./focusbot/index");
 
 const port = process.env.PORT || 8000;
 

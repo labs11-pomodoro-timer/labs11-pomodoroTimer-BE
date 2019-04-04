@@ -1,4 +1,4 @@
-const db = require('./dbConfig');
+const db = require("./dbConfig");
 
 module.exports = {
     updateTS,
@@ -7,9 +7,9 @@ module.exports = {
 };
 
 function updateTS(id, changes) {
-    return db('testing')
-        .where({ id })
-        .update(changes); 
+  return db("testing")
+    .where({ id })
+    .update(changes);
 }
 
 function findById(id) {
