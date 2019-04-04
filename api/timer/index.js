@@ -81,8 +81,12 @@ setInterval(function() {
                                     method: 'PUT',
                                     timeout: 3000,
                                     }, function (error, response, body) {
-                                        console.log("Error: ", error);
-                                        console.log("Response: ", response);
+                                        // The endpoint here is doing all the work, so we don't currently
+                                        // need this function to do anything. However, we have it as an
+                                        // option.
+                                        // Console logs for testing
+                                        //console.log("Error: ", error);
+                                        //console.log("Response: ", response);
                                         //console.log("Body: ", body);
                                 });
                             }, timeRemaining);
@@ -98,10 +102,7 @@ setInterval(function() {
     }, 30000)
     
 
-// This is the endpoint that will be hit to initiate the check of users
-// who are about a minute away from ending their focus timer, if their timer
-// is set to expire soon, a timeout will be started that will clear the timer
-// information once it reaches the deadline
+// This is the endpoint that will show all users who are currently running a timer
 
 // WARNING THIS ENDPOINT IS STILL UNDER DEVELOPMENT, MAY CONTAIN ERRORS
 
@@ -111,10 +112,8 @@ router.get('/', (req, res) => {
         if (users) {
             let newUsers = [];
             for (let i = 0; i < users.length-1;i++) {
-                if (user[i].focusEnd - user[i].focusStart <= 60000) {
-                    // Here is where we will queue up our function that
-                    // begins the Timeout until the timer information
-                    // is cleared from the user's database
+                if (user[i].focusEnd && user[i].focusStart) {
+                    
                     newUsers.push(user[i])
                 }
             }
