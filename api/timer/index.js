@@ -66,7 +66,7 @@ setInterval(function() {
                         // timer and set the fields back to null
                         console.log(`User #${users[i].id} needs their timer cleared`);
                     }
-                    if (users[i].focusEnd - Date.now() <= 60000) {
+                    if (users[i].focusEnd - Date.now() <= 30000) {
                         // Here is where we will queue up our function that
                         // begins the Timeout until the timer information
                         // is cleared from the user's database
