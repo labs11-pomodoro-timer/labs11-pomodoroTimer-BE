@@ -77,7 +77,7 @@ setInterval(function() {
                             setTimeout(function() {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopFocus/${users[i].id}`,
+                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                     }, function (error, response, body) {
@@ -148,7 +148,7 @@ router.get('/start/:time', (req, res) => {
 });
 
 // WARNING - UNDER DEVELOPMENT - timerEnd current set to 2 minutes to test!
-router.put('/startFocus/:id', (req, res) => {
+router.put('/startTimer/:id', (req, res) => {
     const { id } = req.params;
     const timerStart = Date.now();
     const timerEnd = Date.now() + 1000 * 60 * 2;
@@ -169,7 +169,7 @@ router.put('/startFocus/:id', (req, res) => {
         })
 });
 
-router.get('/checkFocus/:id', (req, res) => {
+router.get('/checkTimer/:id', (req, res) => {
     const { id } = req.params;
     db.findById(id)
         .then(user => {
@@ -190,7 +190,7 @@ router.get('/checkFocus/:id', (req, res) => {
         })
 })
 
-router.put('/stopFocus/:id', (req, res) => {
+router.put('/stopTimer/:id', (req, res) => {
     const { id } = req.params;
     const changes = {
         "timerStart": null,
