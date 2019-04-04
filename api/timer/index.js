@@ -71,19 +71,21 @@ setInterval(function() {
                         // begins the Timeout until the timer information
                         // is cleared from the user's database
                         function setTimertoEnd() {
+                            console.log('inside setTimer')
                             
                             let timeRemaining = users[i].timerEnd - Date.now();
                             console.log(`Setting User#${users[i].id} to end timer in ${timeRemaining}ms`)
                             setTimeout(function() {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                                    uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                                    // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                     }, function (error, response, body) {
-                                        console.log("Error: ", error);
-                                        console.log("Response: ", response);
-                                        //console.log("Body: ", body);
+                                        // console.log("Error: ", error);
+                                        // console.log("Response: ", response);
+                                        // console.log("Body: ", body);
                                 });
                             }, timeRemaining);
                         }
@@ -168,6 +170,29 @@ router.put('/startTimer/:id', (req, res) => {
             res.status(500).json({ message: 'server error', err })
         })
 });
+// TESTING TESTING TESTING
+router.put('/startTimer/:id/:timer', (req, res) => {
+    const { id } = req.params;
+    const { timer } = req.params;
+    const timerStart = Date.now();
+    const timerEnd = Date.now() + 1000 * 60 * 2;
+    const changes = {
+        "timerName": timer,
+        "timerStart": timerStart,
+        "timerEnd": timerEnd
+    }
+    db.updateTS(id, changes)
+        .then(count => {
+            if (count) {
+                res.status(200).json({ message: `${count} user(s) updated` });
+            } else {
+                res.status(404).json({ message: 'user not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'server error', err })
+        })
+});
 
 router.get('/checkTimer/:id', (req, res) => {
     const { id } = req.params;
@@ -177,7 +202,7 @@ router.get('/checkTimer/:id', (req, res) => {
                 if (user.timerEnd != null) {
                     const currentTime = Date.now();
                     const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
-                    res.status(200).json({ message: `user is in focus for ${timeleft} minutes` });
+                    res.status(200).json({ message: `user is in "${user.timerName}" mode for ${timeleft} more minutes` });
                 } else {
                     res.status(200).json({ message: `${user.firstname} is not currently in focus time` })
                 }
@@ -190,9 +215,11 @@ router.get('/checkTimer/:id', (req, res) => {
         })
 })
 
-router.put('/stopTimer/:id', (req, res) => {
+router.put('/stopTimer/:id', async (req, res) => {
     const { id } = req.params;
+    const user = await db.findById(id);
     const changes = {
+        "timerName": null,
         "timerStart": null,
         "timerEnd": null
     }
@@ -200,6 +227,7 @@ router.put('/stopTimer/:id', (req, res) => {
         .then(count => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });
+                console.log(`timer for ${user.firstname} (user #${user.id}) has completed`);
             } else {
                 res.status(404).json({ message: 'user not found' });
             }
