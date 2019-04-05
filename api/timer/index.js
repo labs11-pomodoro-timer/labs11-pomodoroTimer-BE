@@ -62,9 +62,19 @@ setInterval(function() {
                         // If the end time was missed, this is the cleanup code
                         // Here, code should be executed to clear the user's
                         // timer and set the fields back to null
-                        console.log(`User #${users[i].id} needs their timer cleared`);
+                        console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
+                        request({
+                            uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                            method: 'PUT',
+                            timeout: 3000,
+                            }, function (error, response, body) {
+                                // console.log("Error: ", error);
+                                // console.log("Response: ", response);
+                                // console.log("Body: ", body);
+                        });
                     }
-                    if (users[i].timerEnd - Date.now() <= 60000) {
+                    if (users[i].timerEnd - Date.now() <= 30000 && users[i].timerEnd - Date.now() > 0) {
                         // Here is where we will queue up our function that
                         // begins the Timeout until the timer information
                         // is cleared from the user's database
@@ -81,6 +91,10 @@ setInterval(function() {
                                     method: 'PUT',
                                     timeout: 3000,
                                     }, function (error, response, body) {
+                                        // All of the work is currently being done at the endpoint we're sending
+                                        // a request to, but this function is here in case we want to execute additional
+                                        // code at this time.
+                                        // 
                                         // console.log("Error: ", error);
                                         // console.log("Response: ", response);
                                         // console.log("Body: ", body);
@@ -173,15 +187,32 @@ router.put('/startTimer/:id', (req, res) => {
 });
 // TESTING TESTING TESTING
 router.put('/startTimer/:id/:timer', (req, res) => {
+    let initialTime;
     const { id } = req.params;
     const { timer } = req.params;
+
+  if (timer === "short") {
+    initialTime = 5 * 60;
+  } else if (timer === "long") {
+    initialTime = 15 * 60;
+  } else if (timer === "focus") {
+    initialTime = 25 * 60;
+  } else if (isNaN(timer) === false) {
+    initialTime = parseInt(timer);
+  } else {
+    res
+      .status(404)
+      .json({ message: "Cannot process request, time argument invalid." });
+  }
+    
     const timerStart = Date.now();
-    const timerEnd = Date.now() + 1000 * 60 * 2;
+    const timerEnd = Date.now() + 1000 * initialTime;
     const changes = {
         "timerName": timer,
         "timerStart": timerStart,
         "timerEnd": timerEnd
-    }
+    };
+    
     db.updateTS(id, changes)
         .then(count => {
             if (count) {
@@ -238,5 +269,40 @@ router.put('/stopTimer/:id', async (req, res) => {
         })
 
 });
+
+// message-based endpoints here
+
+router.get('/start/message/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await db.findById(id);
+    res.status(200).json({ message: `${user.firstname} is starting a timer...`})
+})
+
+router.get('/focus/message/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await db.findById(id);
+    const currentTime = Date.now();
+    const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
+    
+    res.status(200).json({ message: `${user.firstname} is in Focus Time for ${timeleft} minutes...`})
+})
+
+router.get('/shortbreak/message/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await db.findById(id);
+    res.status(200).json({ message: `${user.firstname} is on a shortbreak...`})
+})
+
+router.get('/longbreak/message/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await db.findById(id);
+    res.status(200).json({ message: `${user.firstname} is on a longbreak...`})
+})
+
+router.get('/status/message/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await db.findById(id);
+    res.status(200).json({ message: `${user.firstname} is currently in ${user.timerName} timer mode...`})
+})
 
 module.exports = router;
