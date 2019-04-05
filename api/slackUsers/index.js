@@ -40,8 +40,8 @@ router.get("/:id", (req, res) => {
   .then(users => {
     res.status(200).json(users);
   })
-  .catch(err => res.status(500).json(err: `User with ${id} could not be found.`));
-})
+  .catch(err => res.status(500).json({message: `User with ${id} could not be found.`}));
+});
 
 // GET Slack User by email
 router.get("/:email", (req, res) => {
@@ -50,8 +50,8 @@ router.get("/:email", (req, res) => {
   .then(users => {
     res.status(200).json(users);
   })
-  .catch(err => res.status(500).json(err: `User with ${email} could not be found.`));
-})
+  .catch(err => res.status(500).json({message: `User with ${email} could not be found.`}));
+});
 
 // add slackuser info
 router.get("/add", async (req, res) => {
