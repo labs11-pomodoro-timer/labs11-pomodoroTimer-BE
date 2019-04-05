@@ -33,6 +33,26 @@ router.get("/slackButton", (req, res) => {
   });
 });
 
+//GET Slack User by ID
+router.get("/:id", (req, res) => {
+  const {id} = req.params;
+  db.findById(id)
+  .then(users => {
+    res.status(200).json(users);
+  })
+  .catch(err => res.status(500).json(err: `User with ${id} could not be found.`));
+})
+
+// GET Slack User by email
+router.get("/:email", (req, res) => {
+  const {email} = req.params;
+  db.findByEmail(email)
+  .then(users => {
+    res.status(200).json(users);
+  })
+  .catch(err => res.status(500).json(err: `User with ${email} could not be found.`));
+})
+
 // add slackuser info
 router.get("/add", async (req, res) => {
   const uriUpdate = await {
