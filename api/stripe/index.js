@@ -54,12 +54,16 @@ router.post("/customer/premium", (req, res) => {
     }
     if (customer) {
       if (customer.deleted) {
-        res.send({ premium: false });
-        return;
+        return res.status(404).send({
+            message: 'No subscription found',
+            premium: false
+          });
       } else {
-        res.send({
-          premium: customer.subscriptions.data[0].items.data[0].plan.active
-        });
+        return res.status(200).send({
+            stripeId: customer.id,
+            customer: customer.subscriptions.data[0].items.data[0].plan,
+            premium: true
+          });
       }
     }
   });
