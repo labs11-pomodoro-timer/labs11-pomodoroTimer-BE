@@ -7,8 +7,11 @@ require("dotenv").config();
 const express = require("express");
 const request = require("request");
 const router = express.Router();
+const bodyParser = require('body-parser');
 
 const db = require("../../data/timerModel");
+
+router.use(bodyParser.urlencoded({ extended: true }));
 
 function intervalPoll() {
 
@@ -269,6 +272,13 @@ router.put('/stopTimer/:id', async (req, res) => {
         })
 
 });
+
+//! testing for slash commands
+router.post('/timerStart', (req, res) => {
+    console.log('new request', req.body);
+    // console.log(req.res);
+    // console.log('timer start post');
+})
 
 // message-based endpoints here
 
