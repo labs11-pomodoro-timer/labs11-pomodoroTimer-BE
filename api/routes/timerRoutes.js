@@ -15,8 +15,8 @@ function intervalPoll() {
 }
 
 function countDown(time) {
-  console.log("countDown initiated");
-  waitAndSee(time);
+    console.log("countDown initiated");
+    waitAndSee(time);
 }
 
 // This function will utilize the clearTimeout
@@ -25,21 +25,21 @@ function countDown(time) {
 // }
 
 function waitAndSee(times) {
-  if (times < 1) {
-    console.log("countdown finished");
-    // request({
-    //     url: "/",
-    //     method: "GET",
-    //     json: true,
-    // }, function (error, response, body) {
-    //     console.log(response);
-    // })
-    return;
-  }
-  setTimeout(function() {
-    console.log(times);
-    waitAndSee(times - 1);
-  }, 1000);
+    if (times < 1) {
+        console.log("countdown finished");
+        // request({
+        //     url: "/",
+        //     method: "GET",
+        //     json: true,
+        // }, function (error, response, body) {
+        //     console.log(response);
+        // })
+        return;
+    }
+    setTimeout(function () {
+        console.log(times);
+        waitAndSee(times - 1);
+    }, 1000);
 }
 
 // This is the heartbeat of the timer
@@ -47,11 +47,11 @@ function waitAndSee(times) {
 // that checks all users in the database for active timers
 // A user with a timer that is ending soon will be scheduled a timeout for a
 // function that sends a GET request to the endpoint that stops the timer
-setInterval(function() {
-        db.find()
+setInterval(function () {
+    db.find()
         .then(users => {
             if (users) {
-                for (let i = 0; i < users.length-1;i++) {
+                for (let i = 0; i < users.length - 1; i++) {
                     if (users[i].timerEnd === null | users[i].timerStart === null) {
                         // If a user does not have an active timer, we don't want anything
                         // to happen to them and we will skip them.
@@ -68,10 +68,10 @@ setInterval(function() {
                             uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                             method: 'PUT',
                             timeout: 3000,
-                            }, function (error, response, body) {
-                                // console.log("Error: ", error);
-                                // console.log("Response: ", response);
-                                // console.log("Body: ", body);
+                        }, function (error, response, body) {
+                            // console.log("Error: ", error);
+                            // console.log("Response: ", response);
+                            // console.log("Body: ", body);
                         });
                     }
                     if (users[i].timerEnd - Date.now() <= 30000 && users[i].timerEnd - Date.now() > 0) {
@@ -80,24 +80,24 @@ setInterval(function() {
                         // is cleared from the user's database
                         function setTimertoEnd() {
                             console.log('inside setTimer')
-                            
+
                             let timeRemaining = users[i].timerEnd - Date.now();
                             console.log(`Setting User#${users[i].id} to end timer in ${timeRemaining}ms`)
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
                                     // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
                                     uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
-                                    }, function (error, response, body) {
-                                        // All of the work is currently being done at the endpoint we're sending
-                                        // a request to, but this function is here in case we want to execute additional
-                                        // code at this time.
-                                        // 
-                                        // console.log("Error: ", error);
-                                        // console.log("Response: ", response);
-                                        // console.log("Body: ", body);
+                                }, function (error, response, body) {
+                                    // All of the work is currently being done at the endpoint we're sending
+                                    // a request to, but this function is here in case we want to execute additional
+                                    // code at this time.
+                                    // 
+                                    // console.log("Error: ", error);
+                                    // console.log("Response: ", response);
+                                    // console.log("Body: ", body);
                                 });
                             }, timeRemaining);
                         }
@@ -109,8 +109,8 @@ setInterval(function() {
         .catch(err => {
             console.log({ message: 'server error', err })
         })
-    }, 30000)
-    
+}, 30000)
+
 
 // This is the endpoint that will be hit to initiate the check of users
 // who are about a minute away from ending their focus timer, if their timer
@@ -121,47 +121,47 @@ setInterval(function() {
 
 router.get('/', (req, res) => {
     db.find()
-    .then(users => {
-        if (users) {
-            let newUsers = [];
-            for (let i = 0; i < users.length-1;i++) {
-                if (user[i].timerEnd - user[i].timerStart <= 60000) {
-                    // Here is where we will queue up our function that
-                    // begins the Timeout until the timer information
-                    // is cleared from the user's database
-                    newUsers.push(user[i])
+        .then(users => {
+            if (users) {
+                let newUsers = [];
+                for (let i = 0; i < users.length - 1; i++) {
+                    if (user[i].timerEnd - user[i].timerStart <= 60000) {
+                        // Here is where we will queue up our function that
+                        // begins the Timeout until the timer information
+                        // is cleared from the user's database
+                        newUsers.push(user[i])
+                    }
                 }
+                console.log(newUsers);
+                res.status(200).json({ users: newUsers })
             }
-            console.log(newUsers);
-            res.status(200).json({ users: newUsers})
         }
-      }
-    )
-    .catch(err => {
-res.status(500).json({ message: 'server error', err })
-    })
+        )
+        .catch(err => {
+            res.status(500).json({ message: 'server error', err })
+        })
 });
 
 router.get("/start/:time", (req, res) => {
-  const { time } = req.params;
-  let initialTime;
+    const { time } = req.params;
+    let initialTime;
 
-  if (time === "short") {
-    initialTime = 5 * 60;
-  } else if (time === "long") {
-    initialTime = 15 * 60;
-  } else if (time === "focus") {
-    initialTime = 25 * 60;
-  } else if (isNaN(time) === false) {
-    initialTime = parseInt(time);
-  } else {
-    res
-      .status(404)
-      .json({ message: "Cannot process request, time argument invalid." });
-  }
+    if (time === "short") {
+        initialTime = 5 * 60;
+    } else if (time === "long") {
+        initialTime = 15 * 60;
+    } else if (time === "focus") {
+        initialTime = 25 * 60;
+    } else if (isNaN(time) === false) {
+        initialTime = parseInt(time);
+    } else {
+        res
+            .status(404)
+            .json({ message: "Cannot process request, time argument invalid." });
+    }
 
-  countDown(initialTime);
-  res.status(200).json({ message: "Timer Started" });
+    countDown(initialTime);
+    res.status(200).json({ message: "Timer Started" });
 });
 
 // WARNING - UNDER DEVELOPMENT - timerEnd current set to 2 minutes to test!
@@ -191,20 +191,20 @@ router.put('/startTimer/:id/:timer', (req, res) => {
     const { id } = req.params;
     const { timer } = req.params;
 
-  if (timer === "short") {
-    initialTime = 5 * 60;
-  } else if (timer === "long") {
-    initialTime = 15 * 60;
-  } else if (timer === "focus") {
-    initialTime = 25 * 60;
-  } else if (isNaN(timer) === false) {
-    initialTime = parseInt(timer);
-  } else {
-    res
-      .status(404)
-      .json({ message: "Cannot process request, time argument invalid." });
-  }
-    
+    if (timer === "short") {
+        initialTime = 5 * 60;
+    } else if (timer === "long") {
+        initialTime = 15 * 60;
+    } else if (timer === "focus") {
+        initialTime = 25 * 60;
+    } else if (isNaN(timer) === false) {
+        initialTime = parseInt(timer);
+    } else {
+        res
+            .status(404)
+            .json({ message: "Cannot process request, time argument invalid." });
+    }
+
     const timerStart = Date.now();
     const timerEnd = Date.now() + 1000 * initialTime;
     const changes = {
@@ -212,7 +212,7 @@ router.put('/startTimer/:id/:timer', (req, res) => {
         "timerStart": timerStart,
         "timerEnd": timerEnd
     };
-    
+
     db.updateTS(id, changes)
         .then(count => {
             if (count) {
@@ -275,7 +275,7 @@ router.put('/stopTimer/:id', async (req, res) => {
 router.get('/start/message/:id', async (req, res) => {
     const { id } = req.params;
     const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is starting a timer...`})
+    res.status(200).json({ message: `${user.firstname} is starting a timer...` })
 })
 
 router.get('/focus/message/:id', async (req, res) => {
@@ -283,26 +283,26 @@ router.get('/focus/message/:id', async (req, res) => {
     const user = await db.findById(id);
     const currentTime = Date.now();
     const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
-    
-    res.status(200).json({ message: `${user.firstname} is in Focus Time for ${timeleft} minutes...`})
+
+    res.status(200).json({ message: `${user.firstname} is in Focus Time for ${timeleft} minutes...` })
 })
 
 router.get('/shortbreak/message/:id', async (req, res) => {
     const { id } = req.params;
     const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is on a shortbreak...`})
+    res.status(200).json({ message: `${user.firstname} is on a shortbreak...` })
 })
 
 router.get('/longbreak/message/:id', async (req, res) => {
     const { id } = req.params;
     const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is on a longbreak...`})
+    res.status(200).json({ message: `${user.firstname} is on a longbreak...` })
 })
 
 router.get('/status/message/:id', async (req, res) => {
     const { id } = req.params;
     const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is currently in ${user.timerName} timer mode...`})
+    res.status(200).json({ message: `${user.firstname} is currently in ${user.timerName} timer mode...` })
 })
 
 module.exports = router;
