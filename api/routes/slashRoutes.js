@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const db = require("../../data/dbslackUserModel");
 const request = require("request");
 const bodyParser = require("body-parser");
 const dbSlack = require("../../data/dbslackUserModel");
