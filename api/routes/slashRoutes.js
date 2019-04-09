@@ -2,6 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const db = require("../../data/dbslackUserModel");
 const request = require("request");
+const bodyParser = require("body-parser");
+const dbSlack = require("../../data/dbslackUserModel");
+const dbUsers = require("../../data/dbModel");
 
 // We will need bodyParser to communicate well with Slack
 router.use(bodyParser.urlencoded({ extended: true }));
