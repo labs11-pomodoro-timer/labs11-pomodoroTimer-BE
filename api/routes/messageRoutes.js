@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const db = require("../../data/timerModel");
+const db = require("../../data/dbModel");
 
 // message-based endpoints here6485
 
