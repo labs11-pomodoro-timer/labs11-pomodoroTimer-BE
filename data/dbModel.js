@@ -10,35 +10,35 @@ module.exports = {
 };
 
 function find() {
-  return db("testing");
+  return db("users");
 }
 
 function findById(id) {
-  return db("testing")
+  return db("users")
     .where({ id })
     .first();
 }
 
 function findByEmail(email) {
-  return db("testing")
+  return db("users")
     .where({ email })
     .first();
 }
 
 function add(user) {
-  return db("testing")
+  return db("users")
     .insert(user)
-    .into("testing");
+    .into("users");
 }
 
 function update(id, changes) {
-  return db("testing")
+  return db("users")
     .where({ id })
     .update(changes);
 }
 
 function remove(id) {
-  return db("testing")
+  return db("users")
     .where({ id })
     .del();
 }
