@@ -19,9 +19,9 @@ function findById(id) {
     .first();
 }
 
-function findByEmail(email) {
+function findByEmail(userEmail) {
   return db("slackUsers")
-    .where({ email })
+    .where({ userEmail })
     .first();
 }
 

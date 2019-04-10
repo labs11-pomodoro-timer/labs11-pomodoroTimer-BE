@@ -2,28 +2,28 @@ require("dotenv").config();
 
 const express = require("express");
 const request = require("request");
+const router = express.Router();
 
 const db = require("../../data/dbslackUserModel.js");
 
-const router = express.Router();
-
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-// let uri = "https://bc2134a3.ngrok.io/api/slackusers/add";
-let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/add";
+let uri = "https://095e2719.ngrok.io/api/slackusers/add";
+// let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/add";
 
 router.get("/", (req, res) => {
-  db.find()
-    .then(users => {
-      res.status(200).json(users);
-    })
-    .catch(err => res.status(500).json(err));
+  res.status(200).json({ slackUsers: 'alive' });
+  // db.find()
+  //   .then(users => {
+  //     res.status(200).json(users);
+  //   })
+  //   .catch(err => res.status(500).json(err));
 });
 
 // this is for the slack button
 router.get("/slackButton", (req, res) => {
   const options = {
     // place state here
-    uri: `https://slack.com/oauth/authorize?client_id=586899066608.590399489303&scope=bot,commands,channels:write,groups:write,mpim:write,im:write&redirect_uri=${uri}`,
+    uri: `https://slack.com/oauth/authorize?client_id=${process.env.CLIENT_ID}&scope=bot,commands,channels:write,groups:write,mpim:write,im:write&redirect_uri=${uri}`,
     method: "GET"
   };
   request(options, (error, response, body) => {
@@ -35,14 +35,14 @@ router.get("/slackButton", (req, res) => {
 });
 
 //GET Slack User by ID
-router.get("/:id", (req, res) => {
-  const {id} = req.params;
-  db.findById(id)
-  .then(users => {
-    res.status(200).json(users);
-  })
-  .catch(err => res.status(500).json({message: `User with ${id} could not be found.`}));
-});
+// router.get("/:id", (req, res) => {
+//   const {id} = req.params;
+//   db.findById(id)
+//   .then(users => {
+//     res.status(200).json(users);
+//   })
+//   .catch(err => res.status(500).json({message: `User with ${id} could not be found.`}));
+// });
 
 // GET Slack User by email
 router.get("/:email", (req, res) => {
