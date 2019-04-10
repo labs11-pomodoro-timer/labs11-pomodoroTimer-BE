@@ -9,7 +9,7 @@ const request = require("request");
 const router = express.Router();
 const bodyParser = require('body-parser');
 
-const db = require("../../data/timerModel");
+const db = require("../../data/dbModel");
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -176,7 +176,7 @@ router.put('/startTimer/:id', (req, res) => {
         "timerStart": timerStart,
         "timerEnd": timerEnd
     }
-    db.updateTS(id, changes)
+    db.update(id, changes)
         .then(count => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });
@@ -216,7 +216,7 @@ router.put('/startTimer/:id/:timer', (req, res) => {
         "timerEnd": timerEnd
     };
 
-    db.updateTS(id, changes)
+    db.update(id, changes)
         .then(count => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });
@@ -258,7 +258,7 @@ router.put('/stopTimer/:id', async (req, res) => {
         "timerStart": null,
         "timerEnd": null
     }
-    db.updateTS(id, changes)
+    db.update(id, changes)
         .then(count => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });

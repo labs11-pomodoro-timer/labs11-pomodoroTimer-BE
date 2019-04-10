@@ -18,6 +18,7 @@ router.get("/", (req, res) => {
     })
     .catch(err => res.status(500).json(err));
 });
+
 // this is for the slack button
 router.get("/slackButton", (req, res) => {
   const options = {
