@@ -5,6 +5,7 @@ const usersRouter = require('./api/routes/userRoutes');
 const slackUsersRouter = require('./api/routes/slackRoutes');
 const pomodoroTimerRouter = require('./api/routes/timerRoutes');
 const stripeRouter = require('./api/routes/stripeRoutes');
+const slashRouter = require('./api/routes/slashRoutes');
 
 require('dotenv').config();
 
@@ -18,6 +19,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/slackUsers', slackUsersRouter);
 app.use('/api/timer', pomodoroTimerRouter);
 app.use('/api/stripe', stripeRouter);
+app.use('/api/slashRouter', slashRouter);
 
 // Sanity check
 app.get('/', (req, res) => {
