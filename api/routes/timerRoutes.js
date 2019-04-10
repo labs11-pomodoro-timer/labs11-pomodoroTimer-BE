@@ -67,8 +67,8 @@ setInterval(function () {
                         // timer and set the fields back to null
                         console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
                         request({
-                            // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                            uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                            uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                             method: 'PUT',
                             timeout: 3000,
                         }, function (error, response, body) {
@@ -89,8 +89,8 @@ setInterval(function () {
                             setTimeout(function () {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                                    uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                                    // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                 }, function (error, response, body) {
@@ -278,41 +278,6 @@ router.post('/timerStart', (req, res) => {
     console.log('new request', req.body);
     // console.log(req.res);
     // console.log('timer start post');
-})
-
-// message-based endpoints here
-
-router.get('/start/message/:id', async (req, res) => {
-    const { id } = req.params;
-    const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is starting a timer...` })
-})
-
-router.get('/focus/message/:id', async (req, res) => {
-    const { id } = req.params;
-    const user = await db.findById(id);
-    const currentTime = Date.now();
-    const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
-
-    res.status(200).json({ message: `${user.firstname} is in Focus Time for ${timeleft} minutes...` })
-})
-
-router.get('/shortbreak/message/:id', async (req, res) => {
-    const { id } = req.params;
-    const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is on a shortbreak...` })
-})
-
-router.get('/longbreak/message/:id', async (req, res) => {
-    const { id } = req.params;
-    const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is on a longbreak...` })
-})
-
-router.get('/status/message/:id', async (req, res) => {
-    const { id } = req.params;
-    const user = await db.findById(id);
-    res.status(200).json({ message: `${user.firstname} is currently in ${user.timerName} timer mode...` })
 })
 
 module.exports = router;
