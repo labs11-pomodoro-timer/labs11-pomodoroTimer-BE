@@ -16,7 +16,7 @@ app.use(cors());
 
 // Routes
 app.use('/api/users', usersRouter);
-app.use('/api/slackUsers', slackUsersRouter);
+app.use('/api/slackusers', slackUsersRouter);
 app.use('/api/timer', pomodoroTimerRouter);
 app.use('/api/stripe', stripeRouter);
 app.use('/api/message', messageRouter);

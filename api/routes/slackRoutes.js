@@ -5,18 +5,19 @@ const request = require("request");
 const router = express.Router();
 
 const db = require("../../data/dbslackUserModel.js");
+const userdb = require("../../data/dbModel");
 
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-let uri = "https://095e2719.ngrok.io/api/slackusers/add";
-// let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/add";
+let uri = "https://cbaa2023.ngrok.io/api/slackusers/user/add";
+// let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/user/add";
 
 router.get("/", (req, res) => {
-  res.status(200).json({ slackUsers: 'alive' });
-  // db.find()
-  //   .then(users => {
-  //     res.status(200).json(users);
-  //   })
-  //   .catch(err => res.status(500).json(err));
+  // res.status(200).json({ slackUsers: 'alive' });
+  db.find()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(err => res.status(500).json(err));
 });
 
 // this is for the slack button
@@ -28,9 +29,9 @@ router.get("/slackButton", (req, res) => {
   };
   request(options, (error, response, body) => {
     res.status(200).send(body);
-    // let options = JSON.parse(body);
-    // console.log({body});
-    // console.log({ state: req.query.state });
+    let options = JSON.parse(body);
+    console.log({body});
+    console.log({ state: req.query.state });
   });
 });
 
@@ -44,37 +45,24 @@ router.get("/slackButton", (req, res) => {
 //   .catch(err => res.status(500).json({message: `User with ${id} could not be found.`}));
 // });
 
-// GET Slack User by email
-router.get("/:email", (req, res) => {
-  const {email} = req.params;
-  db.findByEmail(email)
-  .then(users => {
-    res.status(200).json(users);
-  })
-  .catch(err => res.status(500).json({message: `User with ${email} could not be found.`}));
-});
-
 // add slackuser info
-router.get("/add", async (req, res) => {
+router.get("/user/add", async (req, res) => {
   const uriUpdate = await {
-    uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${
-      process.env.CLIENT_ID
-    }&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
+    uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
     method: "GET"
   };
-  //! works with out bot running
   request(uriUpdate, (error, response, body) => {
     let reqResponse = JSON.parse(body);
-    // console.log(reqResponse);
-    // console.log({ state: req.query.state });
-
+    console.log(reqResponse);
+    
     // check for response status
     if (!reqResponse.ok) {
       res
-        .send(`Error: ${JSON.stringify(reqResponse)}`)
-        .status(200)
-        .end();
+      .send(`Error: ${JSON.stringify(reqResponse)}`)
+      .status(404)
+      .end();
     } else {
+      console.log({ state: req.query.state });
       // need to bring something along in state to create the connection between tables
       let slackUserInfo = {
         accessToken: reqResponse.access_token,
@@ -83,7 +71,7 @@ router.get("/add", async (req, res) => {
         teamId: reqResponse.team_id,
         botUserId: reqResponse.bot.bot_user_id,
         botAccessToken: reqResponse.bot.bot_access_token,
-        userEmail: "member email", // item coming from state
+        userEmail: req.query.state, // item coming from state
         channelId: "" // reqResponse.incoming_webhook.channel_id
       };
       // need to add information into the database
@@ -109,6 +97,17 @@ router.post("/add", async (req, res) => {
     res.status(500).json({ message, error });
   }
 });
+
+// GET Slack User by email
+router.get("/:email", (req, res) => {
+  const { email } = req.params;
+  db.findByEmail(email)
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(err => res.status(500).json({ message: `User with ${email} could not be found.` }));
+});
+
 // this is for testing with postman
 router.put("/:id", (req, res) => {
   const { id } = req.params;
