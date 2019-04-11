@@ -6,7 +6,8 @@ module.exports = {
   findByEmail,
   remove,
   add,
-  update
+  update,
+  getUser
 };
 
 function find() {
@@ -19,9 +20,9 @@ function findById(id) {
     .first();
 }
 
-function findByEmail(email) {
+function findByEmail(userEmail) {
   return db("slackUsers")
-    .where({ email })
+    .where({ userEmail })
     .first();
 }
 
@@ -41,4 +42,10 @@ function update(id, changes) {
   return db("slackUsers")
     .where({ id })
     .update(changes);
+}
+
+function getUser(email) {
+  return db("users")
+    .where({ email })
+    .first();
 }
