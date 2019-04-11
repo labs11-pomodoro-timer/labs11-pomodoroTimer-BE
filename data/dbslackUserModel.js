@@ -6,7 +6,8 @@ module.exports = {
   findByEmail,
   remove,
   add,
-  update
+  update,
+  getUser
 };
 
 function find() {
@@ -41,4 +42,10 @@ function update(id, changes) {
   return db("slackUsers")
     .where({ id })
     .update(changes);
+}
+
+function getUser(email) {
+  return db("testing")
+    .where({ email })
+    .first();
 }
