@@ -122,20 +122,25 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       .then(user => {
         let slackUser = user;
         dbUsers.findByEmail(user.email)
+        .then(user => {
+          let id = user.id;
+          console.log("Retrieved the user ID, which looks like: ", id);
+          let postOptions = {
+            uri: `http://localhost:8000/api/startTimer/${id}/focus`,
+            method: "PUT",
+            headers: {
+              "Content-type": "application/json",
+              // Authorization: `Bearer ${token}`
+            }        
+          };
+        })
       })
-      let postOptions = {
-        uri: `http://localhost:8000/api/startTimer/:id/:timer`,
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-          // Authorization: `Bearer ${token}`
-        }        
-      };
+      
       request(postOptions, (error, response, body) => {
         if (error) {
           res.json({ error: "Unable to focus, error occurred."});
         }
-
+        res.json({ message: "Timer started!"})
       })
     }
   });
