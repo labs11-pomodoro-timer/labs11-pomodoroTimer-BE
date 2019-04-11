@@ -72,18 +72,18 @@ router.get("/user/add", async (req, res) => {
 });
 
 // this is for testing with postman
-router.post("/add", async (req, res) => {
-  try {
-    const userData = req.body;
-    const userId = await db.add(userData);
-    const user = await db.findById(userId[0]);
-    res.status(201).json(user);
-  } catch (error) {
-    let message = "error adding the user";
+// router.post("/add", async (req, res) => {
+//   try {
+//     const userData = req.body;
+//     const userId = await db.add(userData);
+//     const user = await db.findById(userId[0]);
+//     res.status(201).json(user);
+//   } catch (error) {
+//     let message = "error adding the user";
 
-    res.status(500).json({ message, error });
-  }
-});
+//     res.status(500).json({ message, error });
+//   }
+// });
 
 // GET Slack User by email
 router.get("/:email", (req, res) => {

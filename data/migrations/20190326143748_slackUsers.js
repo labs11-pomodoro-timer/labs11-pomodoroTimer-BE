@@ -25,7 +25,7 @@ exports.up = function (knex) {
       .string('botAccessToken');
 
     slackUsers
-      .integer('userEmail')
+      .string('userEmail')
       .notNullable();
     // .unique()
 
