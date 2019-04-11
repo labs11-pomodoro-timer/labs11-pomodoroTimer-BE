@@ -13,8 +13,7 @@ exports.seed = function (knex, Promise) {
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
           botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
-          userEmail: 'homullen0@last.fm',
-          channelId: 'CH8SF269E'
+          userEmail: 'homullen0@last.fm'
         },
         {
           id: 2,
@@ -24,8 +23,7 @@ exports.seed = function (knex, Promise) {
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
           botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
-          userEmail: 'gsambals1@merriam-webster.com',
-          channelId: 'CH8SF269E'
+          userEmail: 'gsambals1@merriam-webster.com'
         },
         {
           id: 3,
@@ -35,8 +33,7 @@ exports.seed = function (knex, Promise) {
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
           botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
-          userEmail: 'kerie2@desdev.cn',
-          channelId: 'CH8SF269E'
+          userEmail: 'kerie2@desdev.cn'
         },
         {
           id: 4,
@@ -46,8 +43,7 @@ exports.seed = function (knex, Promise) {
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
           botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
-          userEmail: 'dbleaden3@cnn.com',
-          channelId: 'CH8SF269E'
+          userEmail: 'dbleaden3@cnn.com'
         },
         {
           id: 5,
@@ -57,8 +53,7 @@ exports.seed = function (knex, Promise) {
           teamId: 'TH8SF1YHW',
           botUserId: 'UH2J39X89',
           botAccessToken: 'xoxb-000000000000-000000000000-aAaaa00AAA0AAAaaaaaAaA0A',
-          userEmail: 'boris4@hibu.com',
-          channelId: 'CH8SF269E'
+          userEmail: 'boris4@hibu.com'
         }
       ]);
     });
