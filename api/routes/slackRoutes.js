@@ -19,21 +19,6 @@ router.get("/", (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
-// this is for the slack button
-router.get("/slackButton", (req, res) => {
-  const options = {
-    // place state here
-    uri: `https://slack.com/oauth/authorize?client_id=${process.env.CLIENT_ID}&scope=bot,commands,channels:write,groups:write,mpim:write,im:write&redirect_uri=${uri}`,
-    method: "GET"
-  };
-  request(options, (error, response, body) => {
-    res.status(200).send(body);
-    let options = JSON.parse(body);
-    console.log({body});
-    console.log({ state: req.query.state });
-  });
-});
-
 // add slackuser info
 router.get("/user/add", async (req, res) => {
   const validUser = await db.getUser(req.query.state);
