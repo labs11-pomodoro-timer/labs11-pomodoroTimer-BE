@@ -118,10 +118,13 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
 
     if (reqBody.command === "/focus") {
       let userId = reqBody.user_id;
-      dbSlack.findByUserId(userId)
+      dbSlack
+      .findByUserId(userId)
       .then(user => {
         let slackUser = user;
-        dbUsers.findByEmail(user.email)
+        console.log("Retrieved the user, which looks like: ", user);
+        dbUsers
+        .findByEmail(user.email)
         .then(user => {
           let id = user.id;
           console.log("Retrieved the user ID, which looks like: ", id);
@@ -133,15 +136,22 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
               // Authorization: `Bearer ${token}`
             }        
           };
+          request(postOptions, (error, response, body) => {
+            if (error) {
+              res.json({ error: "Unable to focus, error occurred."});
+            }
+            res.json({ message: "Timer started!"})
+          })
+        })
+        .catch(err => {
+          res.json({ error: "We went wrong on findByEmail()... sorry."});
         })
       })
-      
-      request(postOptions, (error, response, body) => {
-        if (error) {
-          res.json({ error: "Unable to focus, error occurred."});
-        }
-        res.json({ message: "Timer started!"})
+      .catch(err => {
+        res.json({ error: "We went wrong on findByUserId()... sorry"})
       })
+      
+      
     }
   });
 
