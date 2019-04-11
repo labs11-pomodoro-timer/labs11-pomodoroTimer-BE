@@ -117,7 +117,12 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       };
 
     if (reqBody.command === "/focus") {
-      
+      let userId = reqBody.user_id;
+      dbSlack.findByUserId(userId)
+      .then(user => {
+        let slackUser = user;
+        dbUsers.findByEmail(user.email)
+      })
       let postOptions = {
         uri: `http://localhost:8000/api/startTimer/:id/:timer`,
         method: "PUT",
