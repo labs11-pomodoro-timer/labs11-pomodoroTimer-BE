@@ -19,53 +19,26 @@ router.get("/", (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
-// this is for the slack button
-router.get("/slackButton", (req, res) => {
-  const options = {
-    // place state here
-    uri: `https://slack.com/oauth/authorize?client_id=${process.env.CLIENT_ID}&scope=bot,commands,channels:write,groups:write,mpim:write,im:write&redirect_uri=${uri}`,
-    method: "GET"
-  };
-  request(options, (error, response, body) => {
-    res.status(200).send(body);
-    let options = JSON.parse(body);
-    console.log({body});
-    console.log({ state: req.query.state });
-  });
-});
-
-//GET Slack User by ID
-// router.get("/:id", (req, res) => {
-//   const {id} = req.params;
-//   db.findById(id)
-//   .then(users => {
-//     res.status(200).json(users);
-//   })
-//   .catch(err => res.status(500).json({message: `User with ${id} could not be found.`}));
-// });
-
 // add slackuser info
 router.get("/user/add", async (req, res) => {
+  // check user table for user via email
   const validUser = await db.getUser(req.query.state);
+  // build the redirect
   const uriUpdate = await {
     uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
     method: "GET"
   };
+  // check if user is already in slack table
   const slackUser = await db.findByEmail(req.query.state);
+  // if user is not in user table -> forward to registration page
   if(!validUser) {
     res.status(404).json({ message: "this page should load our registration page" });
   } else {
     request(uriUpdate, (error, response, body) => {
       let reqResponse = JSON.parse(body);
-      
-      // check for response status
       if (!reqResponse.ok) {
-        res
-        .send(`Error: ${JSON.stringify(reqResponse)}`)
-        .status(404)
-        .end();
+        res.send(`Error: ${JSON.stringify(reqResponse)}`).status(404).end();
       } else {
-        // need to bring something along in state to create the connection between tables
         let slackUserInfo = {
           accessToken: reqResponse.access_token,
           userId: reqResponse.user_id,
@@ -73,9 +46,9 @@ router.get("/user/add", async (req, res) => {
           teamId: reqResponse.team_id,
           botUserId: reqResponse.bot.bot_user_id,
           botAccessToken: reqResponse.bot.bot_access_token,
-          userEmail: validUser.email, // item coming from state
-          channelId: ""// reqResponse.incoming_webhook.channel_id
+          userEmail: validUser.email
         };
+        // if user in slack already -> update user instead of add new
         if(slackUser) {
           db.update(slackUser.id, slackUserInfo)
             .then(count => {
@@ -99,18 +72,18 @@ router.get("/user/add", async (req, res) => {
 });
 
 // this is for testing with postman
-router.post("/add", async (req, res) => {
-  try {
-    const userData = req.body;
-    const userId = await db.add(userData);
-    const user = await db.findById(userId[0]);
-    res.status(201).json(user);
-  } catch (error) {
-    let message = "error adding the user";
+// router.post("/add", async (req, res) => {
+//   try {
+//     const userData = req.body;
+//     const userId = await db.add(userData);
+//     const user = await db.findById(userId[0]);
+//     res.status(201).json(user);
+//   } catch (error) {
+//     let message = "error adding the user";
 
-    res.status(500).json({ message, error });
-  }
-});
+//     res.status(500).json({ message, error });
+//   }
+// });
 
 // GET Slack User by email
 router.get("/:email", (req, res) => {
