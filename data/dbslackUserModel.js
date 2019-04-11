@@ -4,6 +4,7 @@ module.exports = {
   find,
   findById,
   findByEmail,
+  findByUserId,
   remove,
   add,
   update,
@@ -23,6 +24,12 @@ function findById(id) {
 function findByEmail(userEmail) {
   return db("slackUsers")
     .where({ userEmail })
+    .first();
+}
+
+function findByUserId(userId) {
+  return db("slackUsers")
+    .where({ userId })
     .first();
 }
 
