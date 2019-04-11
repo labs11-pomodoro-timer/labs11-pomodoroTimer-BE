@@ -7,8 +7,8 @@ const router = express.Router();
 const db = require("../../data/dbslackUserModel.js");
 
 //! this needs to match the endpoint on the bot - temp name below via ngrok
-let uri = "https://cbaa2023.ngrok.io/api/slackusers/user/add";
-// let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/user/add";
+// let uri = "https://cbaa2023.ngrok.io/api/slackusers/user/add";
+let uri = "https://focustimer-labs11.herokuapp.com/api/slackusers/user/add";
 
 router.get("/", (req, res) => {
   // res.status(200).json({ slackUsers: 'alive' });
