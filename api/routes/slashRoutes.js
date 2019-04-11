@@ -89,6 +89,11 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
     });
   };
 
+  router.post("/", urlencodedParser, (req, res) => {
+    let reqBody = req.body;
+    console.log(reqBody);
+  })
+
   router.post("/report-focus-time", urlencodedParser, (req, res) => {
       // This route will report in an ephemeral message the time remaining
       // on the focus timer
