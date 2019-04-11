@@ -34,16 +34,6 @@ router.get("/slackButton", (req, res) => {
   });
 });
 
-//GET Slack User by ID
-// router.get("/:id", (req, res) => {
-//   const {id} = req.params;
-//   db.findById(id)
-//   .then(users => {
-//     res.status(200).json(users);
-//   })
-//   .catch(err => res.status(500).json({message: `User with ${id} could not be found.`}));
-// });
-
 // add slackuser info
 router.get("/user/add", async (req, res) => {
   const validUser = await db.getUser(req.query.state);
