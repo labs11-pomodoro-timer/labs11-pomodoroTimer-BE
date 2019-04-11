@@ -21,26 +21,24 @@ router.get("/", (req, res) => {
 
 // add slackuser info
 router.get("/user/add", async (req, res) => {
+  // check user table for user via email
   const validUser = await db.getUser(req.query.state);
+  // build the redirect
   const uriUpdate = await {
     uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
     method: "GET"
   };
+  // check if user is already in slack table
   const slackUser = await db.findByEmail(req.query.state);
+  // if user is not in user table -> forward to registration page
   if(!validUser) {
     res.status(404).json({ message: "this page should load our registration page" });
   } else {
     request(uriUpdate, (error, response, body) => {
       let reqResponse = JSON.parse(body);
-      
-      // check for response status
       if (!reqResponse.ok) {
-        res
-        .send(`Error: ${JSON.stringify(reqResponse)}`)
-        .status(404)
-        .end();
+        res.send(`Error: ${JSON.stringify(reqResponse)}`).status(404).end();
       } else {
-        // need to bring something along in state to create the connection between tables
         let slackUserInfo = {
           accessToken: reqResponse.access_token,
           userId: reqResponse.user_id,
@@ -51,6 +49,7 @@ router.get("/user/add", async (req, res) => {
           userEmail: validUser.email, // item coming from state
           channelId: ""// reqResponse.incoming_webhook.channel_id
         };
+        // if user in slack already -> update user instead of add new
         if(slackUser) {
           db.update(slackUser.id, slackUserInfo)
             .then(count => {
