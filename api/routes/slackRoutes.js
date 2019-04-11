@@ -19,6 +19,19 @@ router.get("/", (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
+router.post("/user/addSlackUser", (req, res) => {
+  let userInfo = req.body;
+  console.log(userInfo);
+  db
+  .add(userInfo)
+  .then(response => {
+      res.status(201).json({ message: "Slack user added." });
+    })
+    .catch(err => {
+      res.status(500).json({ error: "I have failed."})
+    })
+})
+
 // add slackuser info
 router.get("/user/add", async (req, res) => {
   // check user table for user via email

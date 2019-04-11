@@ -101,7 +101,8 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       //WARNING STILL IN DEVELOPMENT
       //MAKE SURE TO SET URI TO PROPER DEVELOPMENT ENDPOINT AS NEEDED
       let postOptions = {
-        uri: `http://localhost:8000/api/timer/start/10`,
+        uri: `http://labs11-pomodorotimer.herokuapp.com/api/timer/start/10`,
+        // uri: `http://localhost:8000/api/timer/start/10`,
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -116,6 +117,9 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       })
       };
 
+      // This is the endpoint for the slash command that enters a user
+      // into Focus Time
+
     if (reqBody.command === "/focus") {
       let userId = reqBody.user_id;
       dbSlack
@@ -124,18 +128,20 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
         let slackUser = user;
         console.log("Retrieved the user, which looks like: ", user);
         dbUsers
-        .findByEmail(user.email)
+        .findByEmail(user.userEmail)
         .then(user => {
           let id = user.id;
           console.log("Retrieved the user ID, which looks like: ", id);
           let postOptions = {
-            uri: `http://localhost:8000/api/startTimer/${id}/focus`,
+            uri: `http://labs11-pomodorotimer.herokuapp.com/api/timer/startTimer/${id}/focus`,
+            // uri: `http://localhost:8000/api/timer/startTimer/${id}/focus`,
             method: "PUT",
             headers: {
               "Content-type": "application/json",
               // Authorization: `Bearer ${token}`
             }        
           };
+          console.log("Here's what the uri looks like: ", postOptions.uri);
           request(postOptions, (error, response, body) => {
             if (error) {
               res.json({ error: "Unable to focus, error occurred."});
