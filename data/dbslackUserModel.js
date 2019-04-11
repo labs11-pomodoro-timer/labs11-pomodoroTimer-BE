@@ -45,7 +45,7 @@ function update(id, changes) {
 }
 
 function getUser(email) {
-  return db("testing")
+  return db("users")
     .where({ email })
     .first();
 }

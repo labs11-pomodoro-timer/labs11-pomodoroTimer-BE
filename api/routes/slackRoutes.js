@@ -51,6 +51,7 @@ router.get("/user/add", async (req, res) => {
     uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${uri}`,
     method: "GET"
   };
+  const slackUser = await db.findByEmail(req.query.state);
   if(!validUser) {
     res.status(404).json({ message: "this page should load our registration page" });
   } else {
@@ -73,14 +74,25 @@ router.get("/user/add", async (req, res) => {
           botUserId: reqResponse.bot.bot_user_id,
           botAccessToken: reqResponse.bot.bot_access_token,
           userEmail: validUser.email, // item coming from state
-          channelId: "" // reqResponse.incoming_webhook.channel_id
+          channelId: ""// reqResponse.incoming_webhook.channel_id
         };
-        // need to add information into the database
-        db.add(slackUserInfo)
-          .then(() => {
-            res.redirect("https://focustimer.now.sh/");
-          })
-          .catch(`Error: ${res}`);
+        if(slackUser) {
+          db.update(slackUser.id, slackUserInfo)
+            .then(count => {
+              if(count) {
+                res.status(200).redirect("https://focustimer.now.sh/");
+              } else {
+                res.status(404).json({ message: 'user not found' });
+              }
+            })
+            .catch(`Error: ${res}`);
+        } else {
+          db.add(slackUserInfo)
+            .then(() => {
+              res.redirect("https://focustimer.now.sh/");
+            })
+            .catch(`Error: ${res}`);
+        }
       }
     });
   }
