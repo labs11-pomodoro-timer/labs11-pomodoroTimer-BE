@@ -46,8 +46,7 @@ router.get("/user/add", async (req, res) => {
           teamId: reqResponse.team_id,
           botUserId: reqResponse.bot.bot_user_id,
           botAccessToken: reqResponse.bot.bot_access_token,
-          userEmail: validUser.email, // item coming from state
-          channelId: ""// reqResponse.incoming_webhook.channel_id
+          userEmail: validUser.email
         };
         // if user in slack already -> update user instead of add new
         if(slackUser) {

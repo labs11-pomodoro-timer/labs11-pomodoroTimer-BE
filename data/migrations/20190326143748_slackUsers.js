@@ -29,9 +29,6 @@ exports.up = function (knex) {
       .notNullable();
     // .unique()
 
-    slackUsers
-      .string('channelId');
-
   })
 };
 
