@@ -56,7 +56,7 @@ setInterval(function () {
                         console.log(`User #${i} in the array cannot be found. Skipping.`);
                         continue;
                     }
-                    if (users[i].timerEnd === null | users[i].timerStart === null) {
+                    if (users[i].timerEnd === null || users[i].timerStart === null) {
                         // If a user does not have an active timer, we don't want anything
                         // to happen to them and we will skip them.
                         console.log(`User #${users[i].id} does not have an active timer.`);
@@ -67,9 +67,9 @@ setInterval(function () {
                         // Here, code should be executed to clear the user's
                         // timer and set the fields back to null
                         console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
-                        
+                        let userIdToEnd = users[i].id;
                         request({
-                            uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                            uri: `http://localhost:8000/api/timer/stopTimer/${userIdToEnd}`,
                             // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                             method: 'PUT',
                             timeout: 3000,
