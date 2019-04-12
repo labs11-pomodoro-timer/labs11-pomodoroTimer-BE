@@ -31,9 +31,15 @@ router.get("/:email", (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const userData = req.body;
-    const userId = await db.add(userData);
-    const user = await db.findById(userId[0]);
-    res.status(201).json(user);
+    const checkEmail = await db.findByEmail(req.body.email);
+    if (!checkEmail) {
+      const userId = await db.add(userData);
+      const user = await db.findById(userId[0]);
+      res.status(201).json(user);
+    } else {
+      res.status(200).json(checkEmail);
+    }
+    // res.status(201).json(user);
   } catch (error) {
     let message = "error creating the user";
 

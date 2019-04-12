@@ -169,7 +169,7 @@ router.get("/start/:time", (req, res) => {
     }
 
     countDown(initialTime);
-    res.status(200).json({ message: "Timer Started" });
+    res.status(200).json(initialTime);
 });
 
 // WARNING - UNDER DEVELOPMENT - timerEnd current set to 2 minutes to test!
