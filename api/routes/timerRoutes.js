@@ -11,11 +11,8 @@ const bodyParser = require('body-parser');
 
 const db = require("../../data/dbModel");
 
-router.use(bodyParser.urlencoded({ extended: true }));
 
-function intervalPoll() {
 
-}
 
 function countDown(time) {
     console.log("countDown initiated");
@@ -54,7 +51,11 @@ setInterval(function () {
     db.find()
         .then(users => {
             if (users) {
-                for (let i = 0; i < users.length - 1; i++) {
+                for (let i = 0; i < users.length; i++) {
+                    if (!users[i]) {
+                        console.log(`User #${i} in the array cannot be found. Skipping.`);
+                        continue;
+                    }
                     if (users[i].timerEnd === null | users[i].timerStart === null) {
                         // If a user does not have an active timer, we don't want anything
                         // to happen to them and we will skip them.
@@ -66,16 +67,19 @@ setInterval(function () {
                         // Here, code should be executed to clear the user's
                         // timer and set the fields back to null
                         console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
+                        
                         request({
-                            // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                            uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                            uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                             method: 'PUT',
                             timeout: 3000,
                         }, function (error, response, body) {
+                            
                             // console.log("Error: ", error);
                             // console.log("Response: ", response);
                             // console.log("Body: ", body);
                         });
+                        continue;
                     }
                     if (users[i].timerEnd - Date.now() <= 30000 && users[i].timerEnd - Date.now() > 0) {
                         // Here is where we will queue up our function that
@@ -89,8 +93,8 @@ setInterval(function () {
                             setTimeout(function () {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                                    uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                                    // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                 }, function (error, response, body) {
@@ -105,6 +109,7 @@ setInterval(function () {
                             }, timeRemaining);
                         }
                         setTimertoEnd();
+                        continue;
                     }
                 }
             }
