@@ -66,80 +66,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
     });
   };
 
-  // This function changes a user's status in Slack
-  function changeUserStatusToFocus(token) {
-    let postOptions = {
-      uri: `https://slack.com/api/users.profile.set`,
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      json: {
-        "profile": {
-            "status_text": "in Focus Time",
-            "status_emoji": ":tomato:",
-            "status_expiration": 0
-        }
-    }
-    };
-    request(postOptions, (error, response, body) => {
-      if (error) {
-        // Error handling
-        res.json({ error: "Error in changeUserStatusToFocus function" });
-      }
-    });
-    request({
-      uri: `https://slack.com/api/dnd.setSnooze?token=${token}&num_minutes=25&pretty=1`,
-      method: "GET",
-      headers: {
-        "Content-type": "application/x-www-form-urlencoded",
-        Authorization: `Bearer ${token}`
-      }
-    }, (error, response, body) => {
-      if (error) {
-        // Error handling
-        res.json({ error: "Error setting do not disturb" });
-      }
-    })
-  };
 
-  function changeUserStatusToBlank(token) {
-    let postOptions = {
-      uri: `https://slack.com/api/users.profile.set`,
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      json: {
-        "profile": {
-            "status_text": "",
-            "status_emoji": "",
-            "status_expiration": 0
-        }
-    }
-    };
-    request(postOptions, (error, response, body) => {
-      if (error) {
-        // Error handling
-        res.json({ error: "Error in changeUserStatusToBlank function" });
-      }
-    });
-    request({
-      uri: `https://slack.com/api/dnd.endDnd`,
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    }, (error, response, body) => {
-      if (error) {
-        // Error handling
-        res.json({ error: "Error setting do not disturb" });
-      }
-    })
-  };
 // THIS IS THE CENTRAL ROUTING POINT FOR ALL SLASH COMMANDS
 // BE CAREFUL, THIS ENDPOINT IS QUITE LARGE AND EASY TO MESS UP
   router.post("/", urlencodedParser, (req, res) => {
@@ -234,7 +161,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
             }        
           };
           console.log("Here's what the uri looks like: ", postOptions.uri);
-          changeUserStatusToBlank(userToken);
+          
           request(postOptions, (error, response, body) => {
             if (error) {
               res.status(500).json({ error: "Unable to stop timer, error occurred."});

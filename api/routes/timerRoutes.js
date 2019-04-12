@@ -10,8 +10,102 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 
 const db = require("../../data/dbModel");
+const dbSlack = require("../../data/dbslackUserModel");
 
+  // This function changes a user's status in Slack
+  function changeUserStatusToFocus(id) {
+    db.findById(id)
+    .then(user => {
+        let userEmail = user.email;
+      dbSlack
+      .findByEmail(userEmail)
+      .then(slackUser => {
+          const token = slackUser.accessToken;
+          let postOptions = {
+              uri: `https://slack.com/api/users.profile.set`,
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token}`
+              },
+              json: {
+                "profile": {
+                    "status_text": "In Focus Time",
+                    "status_emoji": ":tomato:",
+                    "status_expiration": 0
+                }
+            }
+            };
+            request(postOptions, (error, response, body) => {
+              if (error) {
+                // Error handling
+                res.json({ error: "Error in changeUserStatusToFocus function" });
+              }
+            });
+            request({
+              uri: `https://slack.com/api/dnd.setSnooze?token=${token}&num_minutes=25`,
+              method: "GET",
+              headers: {
+                "Content-type": "application/x-www-form-urlencoded",
+                Authorization: `Bearer ${token}`
+              }
+            }, (error, response, body) => {
+              if (error) {
+                // Error handling
+                res.json({ error: "Error setting do not disturb" });
+              }
+            })
+      })
+    })
+  
+};
 
+  function changeUserStatusToBlank(id) {
+      db.findById(id)
+      .then(user => {
+          let userEmail = user.email;
+        dbSlack
+        .findByEmail(userEmail)
+        .then(slackUser => {
+            const token = slackUser.accessToken;
+            let postOptions = {
+                uri: `https://slack.com/api/users.profile.set`,
+                method: "POST",
+                headers: {
+                  "Content-type": "application/json",
+                  Authorization: `Bearer ${token}`
+                },
+                json: {
+                  "profile": {
+                      "status_text": "",
+                      "status_emoji": "",
+                      "status_expiration": 0
+                  }
+              }
+              };
+              request(postOptions, (error, response, body) => {
+                if (error) {
+                  // Error handling
+                  res.json({ error: "Error in changeUserStatusToBlank function" });
+                }
+              });
+              request({
+                uri: `https://slack.com/api/dnd.endDnd`,
+                method: "GET",
+                headers: {
+                  "Content-type": "application/json",
+                  Authorization: `Bearer ${token}`
+                }
+              }, (error, response, body) => {
+                if (error) {
+                  // Error handling
+                  res.json({ error: "Error setting do not disturb" });
+                }
+              })
+        })
+      })
+    
+  };
 
 
 function countDown(time) {
@@ -224,7 +318,9 @@ router.put('/startTimer/:id/:timer', (req, res) => {
     db.update(id, changes)
         .then(count => {
             if (count) {
+                changeUserStatusToFocus(id);
                 res.status(200).json({ message: `${count} user(s) updated` });
+                
             } else {
                 res.status(404).json({ message: 'user not found' });
             }
@@ -268,6 +364,7 @@ router.put('/stopTimer/:id', async (req, res) => {
             if (count) {
                 res.status(200).json({ message: `${count} user(s) updated` });
                 console.log(`timer for ${user.firstname} (user #${user.id}) has completed`);
+                changeUserStatusToBlank(id);
             } else {
                 res.status(404).json({ message: 'user not found' });
             }
