@@ -195,7 +195,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
         // let slackUser = user;
         // console.log("Retrieved the user, which looks like: ", user);
         dbUsers
-        .findByEmail(user.userEmail)
+        .findByEmail(user.email)
         .then(user => {
           let id = user.id;
           changeUserStatusToFocus(userToken);
