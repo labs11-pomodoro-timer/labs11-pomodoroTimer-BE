@@ -67,8 +67,8 @@ setInterval(function () {
                         // timer and set the fields back to null
                         console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
                         request({
-                            uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                            // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                            uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                             method: 'PUT',
                             timeout: 3000,
                         }, function (error, response, body) {
@@ -89,8 +89,8 @@ setInterval(function () {
                             setTimeout(function () {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                                    // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                                    // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                 }, function (error, response, body) {

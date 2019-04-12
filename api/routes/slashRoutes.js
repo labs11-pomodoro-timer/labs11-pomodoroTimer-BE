@@ -101,7 +101,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       //WARNING STILL IN DEVELOPMENT
       //MAKE SURE TO SET URI TO PROPER DEVELOPMENT ENDPOINT AS NEEDED
       let postOptions = {
-        uri: `http://labs11-pomodorotimer.herokuapp.com/api/timer/start/10`,
+        uri: `https://focustimer-labs11.herokuapp.com/api/timer/start/10`,
         // uri: `http://localhost:8000/api/timer/start/10`,
         method: "GET",
         headers: {
@@ -133,7 +133,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
           let id = user.id;
           console.log("Retrieved the user ID, which looks like: ", id);
           let postOptions = {
-            uri: `http://labs11-pomodorotimer.herokuapp.com/api/timer/startTimer/${id}/focus`,
+            uri: `https://focustimer-labs11.herokuapp.com/api/timer/startTimer/${id}/focus`,
             // uri: `http://localhost:8000/api/timer/startTimer/${id}/focus`,
             method: "PUT",
             headers: {
