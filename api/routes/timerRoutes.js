@@ -287,7 +287,8 @@ router.put('/startTimer/:id', (req, res) => {
             res.status(500).json({ message: 'server error', err })
         })
 });
-// TESTING TESTING TESTING
+
+// MAIN TIMER ENDPOINT
 router.put('/startTimer/:id/:timer', (req, res) => {
     let initialTime;
     const { id } = req.params;
@@ -319,7 +320,7 @@ router.put('/startTimer/:id/:timer', (req, res) => {
         .then(count => {
             if (count) {
                 changeUserStatusToFocus(id);
-                res.status(200).json({ message: `${count} user(s) updated` });
+                res.status(200).send(`Timer started!`);
                 
             } else {
                 res.status(404).json({ message: 'user not found' });
@@ -338,9 +339,9 @@ router.get('/checkTimer/:id', (req, res) => {
                 if (user.timerEnd != null) {
                     const currentTime = Date.now();
                     const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
-                    res.status(200).json({ message: `user is in "${user.timerName}" mode for ${timeleft} more minutes` });
+                    res.status(200).send(`${user.firstname} is in ${user.timerName} mode for ${timeleft} more minutes`);
                 } else {
-                    res.status(200).json({ message: `${user.firstname} is not currently in focus time` })
+                    res.status(200).send(`${user.firstname} is not currently in focus time`)
                 }
             } else {
                 res.status(404).json({ message: 'unable to find user' });
@@ -362,7 +363,7 @@ router.put('/stopTimer/:id', async (req, res) => {
     db.update(id, changes)
         .then(count => {
             if (count) {
-                res.status(200).json({ message: `${count} user(s) updated` });
+                res.status(200).send(`Timer stopped`);
                 console.log(`timer for ${user.firstname} (user #${user.id}) has completed`);
                 changeUserStatusToBlank(id);
             } else {
