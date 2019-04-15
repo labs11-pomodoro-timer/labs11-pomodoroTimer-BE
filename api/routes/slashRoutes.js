@@ -80,8 +80,8 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       //WARNING STILL IN DEVELOPMENT
       //MAKE SURE TO SET URI TO PROPER DEVELOPMENT ENDPOINT AS NEEDED
       let postOptions = {
-        // uri: `https://focustimer-labs11.herokuapp.com/api/timer/start/10`,
-        uri: `http://localhost:8000/api/timer/start/10`,
+        uri: `https://focustimer-labs11.herokuapp.com/api/timer/start/10`,
+        // uri: `http://localhost:8000/api/timer/start/10`,
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -110,8 +110,8 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
             let id = user.id;
             console.log("Retrieved the user ID, which looks like: ", id);
             let postOptions = {
-              // uri: `https://focustimer-labs11.herokuapp.com/api/timer/checkTimer/${id}`,
-              uri: `http://localhost:8000/api/timer/checkTimer/${id}`,
+              uri: `https://focustimer-labs11.herokuapp.com/api/timer/checkTimer/${id}`,
+              // uri: `http://localhost:8000/api/timer/checkTimer/${id}`,
               method: "GET",
               headers: {
                 "Content-type": "application/json",
@@ -124,7 +124,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
                 res.json({ error: "Unable to check timer, error occurred."});
               }
               console.log(response.body);
-                res.json({ message: `${body}`})
+                res.send(response.body);
             })
           })
           .catch(err => {
@@ -152,8 +152,8 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
           let id = user.id;
           console.log("Retrieved the user ID, which looks like: ", id);
           let postOptions = {
-            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${id}`,
-            uri: `http://localhost:8000/api/timer/stopTimer/${id}`,
+            uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${id}`,
+            // uri: `http://localhost:8000/api/timer/stopTimer/${id}`,
             method: "PUT",
             headers: {
               "Content-type": "application/json",
@@ -201,8 +201,8 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
           
           // console.log("Retrieved the user ID, which looks like: ", id);
           let postOptions = {
-            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/startTimer/${id}${reqBody.command}`,
-            uri: `http://localhost:8000/api/timer/startTimer/${id}${command}`,
+            uri: `https://focustimer-labs11.herokuapp.com/api/timer/startTimer/${id}${reqBody.command}`,
+            // uri: `http://localhost:8000/api/timer/startTimer/${id}${command}`,
             method: "PUT",
             headers: {
               "Content-type": "application/json",

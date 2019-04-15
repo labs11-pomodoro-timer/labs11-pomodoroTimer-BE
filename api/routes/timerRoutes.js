@@ -163,8 +163,8 @@ setInterval(function () {
                         console.log(`User #${users[i].id} needs their timer cleared. Tidying up...`);
                         let userIdToEnd = users[i].id;
                         request({
-                            uri: `http://localhost:8000/api/timer/stopTimer/${userIdToEnd}`,
-                            // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                            // uri: `http://localhost:8000/api/timer/stopTimer/${userIdToEnd}`,
+                            uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                             method: 'PUT',
                             timeout: 3000,
                         }, function (error, response, body) {
@@ -187,8 +187,8 @@ setInterval(function () {
                             setTimeout(function () {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
-                                    uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
-                                    // uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
+                                    // uri: `http://localhost:8000/api/timer/stopTimer/${users[i].id}`,
+                                    uri: `https://focustimer-labs11.herokuapp.com/api/timer/stopTimer/${users[i].id}`,
                                     method: 'PUT',
                                     timeout: 3000,
                                 }, function (error, response, body) {
@@ -341,7 +341,7 @@ router.get('/checkTimer/:id', (req, res) => {
                     const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
                     res.status(200).send(`${user.firstname} is in ${user.timerName} mode for ${timeleft} more minutes`);
                 } else {
-                    res.status(200).json({ message: `${user.firstname} is not currently in focus time` })
+                    res.status(200).send(`${user.firstname} is not currently in focus time`)
                 }
             } else {
                 res.status(404).json({ message: 'unable to find user' });
