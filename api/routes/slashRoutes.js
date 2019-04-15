@@ -192,13 +192,13 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
       .findByUserId(userId)
       .then(user => {
         let userToken = user.accessToken;
-        // let slackUser = user;
+        let slackEmail = user.userEmail;
         // console.log("Retrieved the user, which looks like: ", user);
         dbUsers
-        .findByEmail(user.userEmail)
+        .findByEmail(slackEmail)
         .then(user => {
           let id = user.id;
-          // changeUserStatusToFocus(userToken);
+          
           // console.log("Retrieved the user ID, which looks like: ", id);
           let postOptions = {
             uri: `https://focustimer-labs11.herokuapp.com/api/timer/startTimer/${id}${reqBody.command}`,
