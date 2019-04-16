@@ -44,8 +44,8 @@ router.post("/subscription", (req, res) => {
 // Retrieve customer's status.
 //"premium: true" is customer has active subscription
 router.post("/customer/premium", (req, res) => {
-  const { id } = req.body;
-  if (!id) {
+  const { stripeId } = req.body;
+  if (!stripeId) {
     res.status(402).send({ err: `${id} is missing` });
   }
   stripe.customers.retrieve(id, function(err, customer) {
