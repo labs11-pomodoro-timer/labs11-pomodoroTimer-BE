@@ -5,6 +5,9 @@ const bodyParser = require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const request = require("request");
 
+const dbUsers = require("../../data/dbModel");
+const dbSlack = require("../../data/dbslackUserModel");
+
 // This is how the information will be sent to this POST endpoint for
 // Slack events.
 // {
@@ -26,7 +29,98 @@ const request = require("request");
 //     "event_time": 1234567890
 // }
 
-router.post("/", (req, res) => {
+function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
+    let postOptions = {
+      uri: responseURL,
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      json: JSONmessage
+    };
+    request(postOptions, (error, response, body) => {
+      if (error) {
+        // Error handling
+        res.json({ error: "Error." });
+      }
+    });
+  };
+
+ // This function is for posting normal messages
+ function postMessage(JSONmessage, token) {
+    let postOptions = {
+      uri: `https://slack.com/api/chat.postMessage`,
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      json: JSONmessage
+    };
+    request(postOptions, (error, response, body) => {
+      if (error) {
+        // Error handling
+        res.json({ error: "Error." });
+      }
+    });
+  };
+
+// This function is for posting ephemeral messages
+function postEphMessage(JSONmessage, token) {
+    let postOptions = {
+      uri: `https://slack.com/api/chat.postEphemeral`,
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      json: JSONmessage
+    };
+    request(postOptions, (error, response, body) => {
+      if (error) {
+        // Error handling
+        res.json({ error: "Error." });
+      }
+    });
+  };
+
+
+router.post("/", async (req, res) => {
     const reqBody = req.body;
     console.log(reqBody);
-})
+    // sendMessageToSlackResponseURL(responseURL, JSONmessage)
+    
+    // If a notification is detected, we need to extract which user
+    // is being notified and save that to a variable
+    if (reqBody.event.type === "message") {
+
+    const messageText = reqBody.event.text;
+    const channelToRespond = reqBody.event.channel;
+    const slackUsers = await dbSlack.find();
+    console.log(messageText);
+    for (let i = 0; i < slackUsers.length; i++) {
+        const userId = slackUsers[i].userId;
+        const userEmail = slackUsers[i].userEmail;
+        console.log(userId);
+        if (messageText.includes(userId)) {
+            const user = await dbUsers.findByEmail(userEmail);
+            console.log(user);
+            if (user.timerEnd) {
+            const sender = reqBody.event.user;
+            
+            console.log(`User ${userId} has reached Eph message statement`);
+            postEphMessage({
+                user: sender,
+                channel: channelToRespond,
+                text: `The person you mentioned is currently in Focus Time and may not be available to answer.`
+                }, "xoxb-586899066608-580615337281-nRFVRjXJT2JCoSIWY1aCkvpB");
+            }
+        }
+    }
+}
+
+    res.status(200).send(reqBody.challenge);
+
+});
+
+module.exports = router
