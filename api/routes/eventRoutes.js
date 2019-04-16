@@ -89,7 +89,7 @@ router.post("/", async (req, res) => {
     const reqBody = req.body;
     console.log(reqBody);
     // sendMessageToSlackResponseURL(responseURL, JSONmessage)
-    res.status(200).send(reqBody.challenge);
+    // res.status(200).send(reqBody.challenge);
     // If a notification is detected, we need to extract which user
     // is being notified and save that to a variable
     if (reqBody.event.type === "message") {
