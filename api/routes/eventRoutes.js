@@ -89,7 +89,7 @@ router.post("/", async (req, res) => {
     const reqBody = req.body;
     console.log(reqBody);
     // sendMessageToSlackResponseURL(responseURL, JSONmessage)
-    
+    res.status(200).send(reqBody.challenge);
     // If a notification is detected, we need to extract which user
     // is being notified and save that to a variable
     if (reqBody.event.type === "message") {
@@ -113,13 +113,13 @@ router.post("/", async (req, res) => {
                 user: sender,
                 channel: channelToRespond,
                 text: `The person you mentioned is currently in Focus Time and may not be available to answer.`
-                }, "xoxb-586899066608-580615337281-nRFVRjXJT2JCoSIWY1aCkvpB");
+                }, process.env.BOT_TOKEN);
             }
         }
     }
 }
 
-    res.status(200).send(reqBody.challenge);
+    
 
 });
 
