@@ -26,17 +26,15 @@ module.exports = {
   },
   production: {
     client: "pg",
-    connection: dbConnection, // can be and object or a string
+    connection: dbConnection,
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations",
+      // tableName: "knex_migrations",
       directory: "./data/migrations"
-    },
-    seeds: {
-      directory: "./data/seeds"
     }
+    
   }
 };
