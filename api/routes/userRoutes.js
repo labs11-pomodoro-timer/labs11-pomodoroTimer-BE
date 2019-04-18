@@ -35,8 +35,8 @@ router.post("/", async (req, res) => {
     if (!checkEmail) {
       try {
         const userId = await db.add(userData);
-        const user = await db.findById(userId[0]);
-        res.status(201).json(user);
+        // const user = await db.findById(userId[0]);
+        res.status(201).json(userId);
       } catch (error) {
         res.status(500).json({error: "Unable to add user to database"})
       }
