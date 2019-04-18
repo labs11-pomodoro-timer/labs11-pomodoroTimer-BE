@@ -46,9 +46,9 @@ router.post("/subscription", (req, res) => {
 router.post("/customer/premium", (req, res) => {
   const { stripeId } = req.body;
   if (!stripeId) {
-    res.status(402).send({ err: `${id} is missing` });
+    res.status(402).send({ err: `${stripeId} is missing` });
   }
-  stripe.customers.retrieve(id, function(err, customer) {
+  stripe.customers.retrieve(stripeId, function(err, customer) {
     if (err) {
       return res.status(500).send({ err });
     }
