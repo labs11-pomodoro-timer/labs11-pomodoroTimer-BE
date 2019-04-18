@@ -27,10 +27,10 @@ module.exports = {
   production: {
     client: "pg",
     connection: dbConnection,
-    pool: {
-      min: 2,
-      max: 10
-    },
+    // pool: {
+    //   min: 2,
+    //   max: 10
+    // },
     useNullAsDefault: true,
     migrations: {
       // tableName: "knex_migrations",
