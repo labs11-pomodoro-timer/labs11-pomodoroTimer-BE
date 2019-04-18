@@ -31,11 +31,16 @@ router.get("/:email", (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const userData = req.body;
-    const checkEmail = await db.findByEmail(req.body.email);
+    const checkEmail = await db.findByEmail(userData.email);
     if (!checkEmail) {
-      const userId = await db.add(userData);
-      const user = await db.findById(userId[0]);
-      res.status(201).json(user);
+      try {
+        const userId = await db.add(userData);
+        const user = await db.findById(userId[0]);
+        res.status(201).json(user);
+      } catch (error) {
+        res.status(500).json({error: "Unable to add user to database"})
+      }
+      
     } else {
       res.status(200).json(checkEmail);
     }

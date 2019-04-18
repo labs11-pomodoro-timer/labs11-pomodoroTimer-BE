@@ -156,7 +156,7 @@ setInterval(function () {
                         console.log(`User #${users[i].id} does not have an active timer.`);
                         continue;
                     }
-                    if (users[i].timerEnd < Date.now()) {
+                    if (users[i].timerEnd < Math.floor(Date.now() / 1000)) {
                         // If the end time was missed, this is the cleanup code
                         // Here, code should be executed to clear the user's
                         // timer and set the fields back to null
@@ -175,15 +175,15 @@ setInterval(function () {
                         });
                         continue;
                     }
-                    if (users[i].timerEnd - Date.now() <= 30000 && users[i].timerEnd - Date.now() > 0) {
+                    if (users[i].timerEnd - Math.floor(Date.now() / 1000) <= 30 && users[i].timerEnd - Math.floor(Date.now() / 1000) > 0) {
                         // Here is where we will queue up our function that
                         // begins the Timeout until the timer information
                         // is cleared from the user's database
                         function setTimertoEnd() {
                             console.log('inside setTimer')
 
-                            let timeRemaining = users[i].timerEnd - Date.now();
-                            console.log(`Setting User#${users[i].id} to end timer in ${timeRemaining}ms`)
+                            let timeRemaining = users[i].timerEnd - Math.floor(Date.now() / 1000);
+                            console.log(`Setting User#${users[i].id} to end timer in ${timeRemaining} seconds`)
                             setTimeout(function () {
                                 console.log(`${users[i].id} should have their timer ended here`);
                                 request({
@@ -200,7 +200,7 @@ setInterval(function () {
                                     // console.log("Response: ", response);
                                     // console.log("Body: ", body);
                                 });
-                            }, timeRemaining);
+                            }, timeRemaining * 1000);
                         }
                         setTimertoEnd();
                         continue;
@@ -238,11 +238,12 @@ router.get("/start/:time", (req, res) => {
 });
 
 // MAIN TIMER ENDPOINT
-router.put('/startTimer/:id/:timer', (req, res) => {
+router.put('/startTimer/:id/:timer', async (req, res) => {
+    // try {
     let initialTime;
     const { id } = req.params;
     const { timer } = req.params;
-    let nameOfTimer;
+    let nameOfTimer = "";
     if (timer === "short") {
         initialTime = 5 * 60;
         nameOfTimer = "short break";
@@ -251,25 +252,37 @@ router.put('/startTimer/:id/:timer', (req, res) => {
         nameOfTimer = "long break";
     } else if (timer === "focus") {
         initialTime = 25 * 60;
-        nameOfTimer = "Focus Time"
+        nameOfTimer = "Focus Time";
     } else if (isNaN(timer) === false) {
         initialTime = parseInt(timer);
-        nameOfTimer = "custom timer"
+        nameOfTimer = "custom timer";
     } else {
         res
             .status(404)
             .json({ message: "Cannot process request, time argument invalid." });
     }
-
-    const timerStart = Date.now();
-    const timerEnd = Date.now() + 1000 * initialTime;
+    console.log(nameOfTimer);
+    console.log(id);
+    const timerStart = Math.floor(Date.now() / 1000);
+    const timerEnd = Math.floor(Date.now() / 1000 + initialTime);
     const changes = {
         "timerName": nameOfTimer,
         "timerStart": timerStart,
         "timerEnd": timerEnd
     };
-
-    db.update(id, changes)
+    console.log(changes);
+    // const count = await db.update(id, changes);
+    // console.log(count);
+    // if (!count) {
+    //     res.status(404).json({ message: 'user not found' });
+    // } else {
+    //     changeUserStatusToFocus(id);
+    //     res.status(200).send('Timer started!');
+    // }
+//     } catch (error) {
+//         res.status(500).json({ message: 'server error', error })
+// }
+        db.update(id, changes)
         .then(count => {
             if (count) {
                 changeUserStatusToFocus(id);
@@ -290,8 +303,8 @@ router.get('/checkTimer/:id', (req, res) => {
         .then(user => {
             if (user) {
                 if (user.timerEnd != null) {
-                    const currentTime = Date.now();
-                    const timeleft = Math.floor((user.timerEnd - currentTime) / (1000 * 60));
+                    const currentTime = (Date.now() / 1000);
+                    const timeleft = Math.floor((user.timerEnd - currentTime) / 60);
                     res.status(200).send(`${user.firstname} is in ${user.timerName} mode for ${timeleft} more minutes`);
                 } else {
                     res.status(200).send(`${user.firstname} is not currently in focus time`)
