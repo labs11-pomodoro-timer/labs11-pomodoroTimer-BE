@@ -214,36 +214,7 @@ setInterval(function () {
 }, 30000)
 
 
-// This is the endpoint that will be hit to initiate the check of users
-// who are about a minute away from ending their focus timer, if their timer
-// is set to expire soon, a timeout will be started that will clear the timer
-// information once it reaches the deadline
-
-// WARNING THIS ENDPOINT IS STILL UNDER DEVELOPMENT, MAY CONTAIN ERRORS
-
-router.get('/', (req, res) => {
-    db.find()
-        .then(users => {
-            if (users) {
-                let newUsers = [];
-                for (let i = 0; i < users.length - 1; i++) {
-                    if (user[i].timerEnd - user[i].timerStart <= 60000) {
-                        // Here is where we will queue up our function that
-                        // begins the Timeout until the timer information
-                        // is cleared from the user's database
-                        newUsers.push(user[i])
-                    }
-                }
-                console.log(newUsers);
-                res.status(200).json({ users: newUsers })
-            }
-        }
-        )
-        .catch(err => {
-            res.status(500).json({ message: 'server error', err })
-        })
-});
-
+// This is a test endpoint for starting a countdown timer
 router.get("/start/:time", (req, res) => {
     const { time } = req.params;
     let initialTime;
@@ -266,42 +237,24 @@ router.get("/start/:time", (req, res) => {
     res.status(200).json(initialTime);
 });
 
-// WARNING - UNDER DEVELOPMENT - timerEnd current set to 2 minutes to test!
-router.put('/startTimer/:id', (req, res) => {
-    const { id } = req.params;
-    const timerStart = Date.now();
-    const timerEnd = Date.now() + 1000 * 60 * 2;
-    const changes = {
-        "timerStart": timerStart,
-        "timerEnd": timerEnd
-    }
-    db.update(id, changes)
-        .then(count => {
-            if (count) {
-                res.status(200).json({ message: `${count} user(s) updated` });
-            } else {
-                res.status(404).json({ message: 'user not found' });
-            }
-        })
-        .catch(err => {
-            res.status(500).json({ message: 'server error', err })
-        })
-});
-
 // MAIN TIMER ENDPOINT
 router.put('/startTimer/:id/:timer', (req, res) => {
     let initialTime;
     const { id } = req.params;
     const { timer } = req.params;
-
+    let nameOfTimer;
     if (timer === "short") {
         initialTime = 5 * 60;
+        nameOfTimer = "short break";
     } else if (timer === "long") {
         initialTime = 15 * 60;
+        nameOfTimer = "long break";
     } else if (timer === "focus") {
         initialTime = 25 * 60;
+        nameOfTimer = "Focus Time"
     } else if (isNaN(timer) === false) {
         initialTime = parseInt(timer);
+        nameOfTimer = "custom timer"
     } else {
         res
             .status(404)
@@ -311,7 +264,7 @@ router.put('/startTimer/:id/:timer', (req, res) => {
     const timerStart = Date.now();
     const timerEnd = Date.now() + 1000 * initialTime;
     const changes = {
-        "timerName": timer,
+        "timerName": nameOfTimer,
         "timerStart": timerStart,
         "timerEnd": timerEnd
     };
@@ -375,12 +328,5 @@ router.put('/stopTimer/:id', async (req, res) => {
         })
 
 });
-
-//! testing for slash commands
-router.post('/timerStart', (req, res) => {
-    console.log('new request', req.body);
-    // console.log(req.res);
-    // console.log('timer start post');
-})
 
 module.exports = router;

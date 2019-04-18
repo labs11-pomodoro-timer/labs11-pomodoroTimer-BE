@@ -107,12 +107,13 @@ router.post("/", async (req, res) => {
             console.log(user);
             if (user.timerEnd) {
             const sender = reqBody.event.user;
-            
+            const timeLeft = (user.timerEnd - user.timerStart) / 1000 / 60;
+            const whichTimer = user.timerName;
             console.log(`User ${userId} has reached Eph message statement`);
             postEphMessage({
                 user: sender,
                 channel: channelToRespond,
-                text: `The person you mentioned is currently in Focus Time and may not be available to answer.`
+                text: `That person is currently in ${whichTimer} mode for ${timeLeft} minutes and may not be available to answer.`
                 }, process.env.BOT_TOKEN);
             }
         }
