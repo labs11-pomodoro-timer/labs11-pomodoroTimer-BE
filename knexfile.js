@@ -1,14 +1,14 @@
 // Update with your config settings.
 
 require("dotenv").config();
-const localPgConnection = {
-  host: "localhost", // address to find the db server
-  database: "focustimer",
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS
-};
+// const localPgConnection = {
+//   host: "localhost", // address to find the db server
+//   database: "focustimer",
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS
+// };
 
-const dbConnection = process.env.DATABASE_URL || localPgConnection;
+const dbConnection = process.env.DATABASE_URL || null;
 
 module.exports = {
   development: {
@@ -31,6 +31,7 @@ module.exports = {
       min: 2,
       max: 10
     },
+    useNullAsDefault: true,
     migrations: {
       // tableName: "knex_migrations",
       directory: "./data/migrations"

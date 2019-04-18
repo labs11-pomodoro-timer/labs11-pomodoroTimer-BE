@@ -12,7 +12,9 @@ const dbUsers = require("../../data/dbModel");
 router.use(bodyParser.urlencoded({ extended: true }));
 // HOF that takes in the uri and json message for a slack message
 
-
+function ErrorRouteToWebsite(res) {
+  res.send("You were not found in the user list, please visit https://focustimer.now.sh and register")
+}
  
 
   
@@ -40,7 +42,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
       };
       request(postOptions, (error, response, body) => {
         if (error) {
-          res.json({ error: "I am become error."});
+          res.json({ error: "An error has occurred."});
         }
         res.json( { message: "Timer started!"} );
         
@@ -78,16 +80,16 @@ router.use(bodyParser.urlencoded({ extended: true }));
             })
           })
           .catch(err => {
-            res.json({ error: "We went wrong on findByEmail()... sorry."});
+            ErrorRouteToWebsite(res);
           })
         })
         .catch(err => {
-          res.json({ error: "We went wrong on findByUserId()... sorry"})
-        })
+          ErrorRouteToWebsite(res);
+          })
         
         
       } else
-
+      // slash command for stopping the timer
     if (reqBody.command === "/stop") {
       let userId = reqBody.user_id;
       dbSlack
@@ -121,11 +123,11 @@ router.use(bodyParser.urlencoded({ extended: true }));
           })
         })
         .catch(err => {
-          res.status(500).json({ error: "We went wrong on findByEmail()... sorry."});
+          ErrorRouteToWebsite(res);        
         })
       })
       .catch(err => {
-        res.status(500).json({ error: "We went wrong on findByUserId()... sorry"})
+        ErrorRouteToWebsite(res);      
       })
       
       
@@ -169,11 +171,11 @@ router.use(bodyParser.urlencoded({ extended: true }));
           })
         })
         .catch(err => {
-          res.json({ error: "We went wrong on findByEmail()... sorry."});
+          ErrorRouteToWebsite(res);        
         })
       })
       .catch(err => {
-        res.json({ error: "We went wrong on findByUserId()... sorry"})
+        ErrorRouteToWebsite(res);      
       })
       
       
@@ -181,25 +183,5 @@ router.use(bodyParser.urlencoded({ extended: true }));
       res.status(500).json({ error: "I'm sorry, I don't understand your command."});
     }
   });
-
-  router.post("/report-focus-time", urlencodedParser, (req, res) => {
-      // This route will report in an ephemeral message the time remaining
-      // on the focus timer
-      let reqBody = req.body;
-      console.log("reqBody:", reqBody);
-      let { channel_id, user_id } = reqBody;
-      console.log({ channel_id: channel_id, user_id: user_id });
-
-      dbSlack
-        .findById(user_id)
-        .then(data => {
-            console.log({ data: data });
-
-        })
-  })
-
-  router.post("/change-user-status", urlencodedParser, (req, res) => {
-      // This route will write the user's custom status
-  })
 
 module.exports = router;
