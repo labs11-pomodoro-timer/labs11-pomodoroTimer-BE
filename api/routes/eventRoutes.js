@@ -107,7 +107,7 @@ router.post("/", async (req, res) => {
             console.log(user);
             if (user.timerEnd) {
             const sender = reqBody.event.user;
-            const timeLeft = Math.floor(((Date.now() / 1000) - user.timerEnd) / 60);
+            const timeLeft = ((user.timerEnd - Math.floor(Date.now() / 1000)) / 60);
             const whichTimer = user.timerName;
             console.log(`User ${userId} has reached Eph message statement`);
             postEphMessage({
