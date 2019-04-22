@@ -27,6 +27,9 @@ exports.up = function (knex) {
         users
             .integer('timerEnd', 20);
 
+        users
+            .boolean('premiumUser')
+            .defaultTo(false);
     })
 
 };
