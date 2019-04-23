@@ -329,7 +329,7 @@ router.put('/stopTimer/:id', async (req, res) => {
     db.update(id, changes)
         .then(count => {
             if (count) {
-                res.status(200).send(`Timer stopped`);
+                res.status(200).send('Timer stopped');
                 console.log(`timer for ${user.firstname} (user #${user.id}) has completed`);
                 changeUserStatusToBlank(id);
             } else {
