@@ -118,7 +118,7 @@ function ErrorRouteToWebsite(res) {
             if (error) {
               res.status(500).json({ error: "Unable to stop timer, error occurred."});
             }
-            res.status(200).json(`${body}`)
+            res.status(200).json(body)
             
           })
         })
