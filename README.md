@@ -5,7 +5,7 @@
 # Focus Timer backend server README
 
 * [Getting Started](#getting-started)
-* [Prerequisites](#prerequesites)
+* [Prerequisites](#prerequisites)
 * [Installing](#installing)
 * [API](#api)
 * [Deployment](#deployment)
