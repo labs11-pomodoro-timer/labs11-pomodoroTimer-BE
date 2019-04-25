@@ -60,6 +60,40 @@ const dbSlack = require("../../data/dbslackUserModel");
   
 };
 
+function changeUserStatusToBreak(id) {
+    db.findById(id)
+    .then(user => {
+        let userEmail = user.email;
+      dbSlack
+      .findByEmail(userEmail)
+      .then(slackUser => {
+          const token = slackUser.accessToken;
+          let postOptions = {
+              uri: `https://slack.com/api/users.profile.set`,
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token}`
+              },
+              json: {
+                "profile": {
+                    "status_text": "On Break",
+                    "status_emoji": ":tomato:",
+                    "status_expiration": 0
+                }
+            }
+            };
+            request(postOptions, (error, response, body) => {
+              if (error) {
+                // Error handling
+                res.json({ error: "Error in changeUserStatusToBreak function" });
+              }
+            });
+        })
+    })
+  
+};
+
   function changeUserStatusToBlank(id) {
       db.findById(id)
       .then(user => {
