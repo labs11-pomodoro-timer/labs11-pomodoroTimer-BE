@@ -60,6 +60,40 @@ const dbSlack = require("../../data/dbslackUserModel");
   
 };
 
+function changeUserStatusToBreak(id) {
+    db.findById(id)
+    .then(user => {
+        let userEmail = user.email;
+      dbSlack
+      .findByEmail(userEmail)
+      .then(slackUser => {
+          const token = slackUser.accessToken;
+          let postOptions = {
+              uri: `https://slack.com/api/users.profile.set`,
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token}`
+              },
+              json: {
+                "profile": {
+                    "status_text": "On Break",
+                    "status_emoji": ":tomato:",
+                    "status_expiration": 0
+                }
+            }
+            };
+            request(postOptions, (error, response, body) => {
+              if (error) {
+                // Error handling
+                res.json({ error: "Error in changeUserStatusToBreak function" });
+              }
+            });
+        })
+    })
+  
+};
+
   function changeUserStatusToBlank(id) {
       db.findById(id)
       .then(user => {
@@ -246,13 +280,13 @@ router.put('/startTimer/:id/:timer', async (req, res) => {
     let nameOfTimer = "";
     if (timer === "short") {
         initialTime = 5 * 60;
-        nameOfTimer = "short break";
+        nameOfTimer = "break";
     } else if (timer === "long") {
         initialTime = 15 * 60;
-        nameOfTimer = "long break";
+        nameOfTimer = "break";
     } else if (timer === "focus") {
         initialTime = 25 * 60;
-        nameOfTimer = "Focus Time";
+        nameOfTimer = "focus";
     } else if (isNaN(timer) === false) {
         initialTime = parseInt(timer);
         nameOfTimer = "custom timer";
@@ -285,9 +319,14 @@ router.put('/startTimer/:id/:timer', async (req, res) => {
         db.update(id, changes)
         .then(count => {
             if (count) {
-                changeUserStatusToFocus(id);
-                res.status(200).send(`Timer started!`);
-                
+                if (changes.timerName === "focus") {
+                    changeUserStatusToFocus(id);
+                    res.status(200).send(`Focus Timer started!`);
+                }
+                if (changes.timerName === "break") {
+                    changeUserStatusToBreak(id);
+                    res.status(200).send(`Break Timer started!`)
+                }
             } else {
                 res.status(404).json({ message: 'user not found' });
             }
