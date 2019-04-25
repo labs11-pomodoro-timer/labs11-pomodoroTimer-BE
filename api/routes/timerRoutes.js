@@ -319,7 +319,7 @@ router.put('/startTimer/:id/:timer', async (req, res) => {
         db.update(id, changes)
         .then(count => {
             if (count) {
-                if (changes.timerName === "focus") {
+                if (changes.timerName === "focus" || changes.timerName === "custom timer") {
                     changeUserStatusToFocus(id);
                     res.status(200).send(`Focus Timer started!`);
                 }
