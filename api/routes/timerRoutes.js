@@ -319,9 +319,14 @@ router.put('/startTimer/:id/:timer', async (req, res) => {
         db.update(id, changes)
         .then(count => {
             if (count) {
-                changeUserStatusToFocus(id);
-                res.status(200).send(`Timer started!`);
-                
+                if (changes.timerName === "focus") {
+                    changeUserStatusToFocus(id);
+                    res.status(200).send(`Focus Timer started!`);
+                }
+                if (changes.timerName === "break") {
+                    changeUserStatusToBreak(id);
+                    res.status(200).send(`Break Timer started!`)
+                }
             } else {
                 res.status(404).json({ message: 'user not found' });
             }
