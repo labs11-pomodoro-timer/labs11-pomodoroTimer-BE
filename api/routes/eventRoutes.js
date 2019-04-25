@@ -105,7 +105,7 @@ router.post("/", async (req, res) => {
         if (messageText.includes(userId)) {
             const user = await dbUsers.findByEmail(userEmail);
             console.log(user);
-            if (user.timerEnd) {
+            if (user.timerName === "focus") {
             const sender = reqBody.event.user;
             const timeLeft = (Math.floor((user.timerEnd - Math.floor(Date.now() / 1000)) / 60));
             const whichTimer = user.timerName;
