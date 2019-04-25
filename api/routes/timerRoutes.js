@@ -246,13 +246,13 @@ router.put('/startTimer/:id/:timer', async (req, res) => {
     let nameOfTimer = "";
     if (timer === "short") {
         initialTime = 5 * 60;
-        nameOfTimer = "short break";
+        nameOfTimer = "break";
     } else if (timer === "long") {
         initialTime = 15 * 60;
-        nameOfTimer = "long break";
+        nameOfTimer = "break";
     } else if (timer === "focus") {
         initialTime = 25 * 60;
-        nameOfTimer = "Focus Time";
+        nameOfTimer = "focus";
     } else if (isNaN(timer) === false) {
         initialTime = parseInt(timer);
         nameOfTimer = "custom timer";
