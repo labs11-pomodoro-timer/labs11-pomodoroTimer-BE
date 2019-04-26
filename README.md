@@ -7,8 +7,8 @@
 * [Getting Started](#getting-started)
 * [Prerequisites](#prerequesites)
 * [Installing](#installing)
-* [API](#api)
 * [Deployment](#deployment)
+* [API](#api)
 * [Built With](#built-with)
 * [Authors](#authors)
 * [License](#license)
@@ -33,7 +33,7 @@ node -v
 
 You will also need to have yarn installed. Installation instructions for yarn can be found [here](https://yarnpkg.com/lang/en/docs/install/).
 
-### Installing
+### Installing locally for development
 
 First, 
 
@@ -53,6 +53,15 @@ NOTE: There are several places in code containing development URIs that begin wi
 Be sure to switch these URIs from production to development and vice versa by commenting out the appropriate
 line of URI information.
 
+## Deployment
+
+To deploy this back-end to Heroku, inside of this repo's root directory, type
+
+```
+heroku run
+```
+
+and follow the CLI instructions from there.
 
 ## API
 
@@ -129,15 +138,7 @@ Request body:
             }
 
 
-## Deployment
 
-To deploy this back-end to Heroku, inside of this repo's root directory, type
-
-```
-heroku run
-```
-
-and follow the CLI instructions from there.
 
 ## Built With
 
